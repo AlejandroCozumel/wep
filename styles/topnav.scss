@@ -3,24 +3,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: $topnav-height;
+  height: var(--topnav-height);
   .topnav__search {
     position: relative;
     height: 50px;
-    background-color: $main-bg;
+    background-color: var(--main-bg);
     display: flex;
     align-items: center;
-    box-shadow: $box-shadow;
-    border-radius: $border-radius;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
     overflow: hidden;
     input {
       height: 100%;
       width: 100%;
       padding: 10px 60px 10px 20px;
       font-size: 1rem;
-      border-radius: $border-radius;
-      color: $txt-color;
-      background-color: $main-bg;
+      border-radius: var(--border-radius);
+      color: var(--txt-color);
+      background-color: var(--main-bg);
     }
     i {
       font-size: 1.5rem;
@@ -48,7 +48,7 @@
 }
 
 .notification-item:hover{
-  background-color: $second-bg;
+  background-color: var(--second-bg);
 }
 
 .topnav__right-user {

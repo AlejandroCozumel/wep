@@ -1,11 +1,11 @@
 .sidebar {
-  min-width: $sidebar-width;
+  min-width: var(--sidebar-width);
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  background-color: $main-bg;
-  box-shadow: $box-shadow;
+  background-color: var(--main-bg);
+  box-shadow: var(--box-shadow);
   .sidebar__logo {
     height: 150px;
     display: flex;
@@ -35,12 +35,12 @@
     }
   }
   &:hover{
-    color: $main-color;
+    color: var(--main-color);
   }
 }
 
 .sidebar__item-inner.active {
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   background-image: linear-gradient(
       to right,
       var(--main-color),

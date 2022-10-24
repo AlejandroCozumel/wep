@@ -2,9 +2,9 @@
   padding: 30px;
   display: flex;
   align-items: center;
-  background-color: $main-bg;
-  box-shadow: $box-shadow;
-  border-radius: $border-radius;
+  background-color: var(--main-bg);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -38,8 +38,8 @@
   border-radius: 50%;
   background-image: linear-gradient(
       to top right,
-      $main-color,
-      $second-color
+      var(--main-color),
+      var(--second-color)
   );
   position: absolute;
   left: -50%;
@@ -53,5 +53,5 @@
 }
 
 .status-card:hover {
-  color: $txt-white;
+  color: var(--txt-white);
 }

@@ -1,10 +1,10 @@
 .layout {
-  color: $txt-color;
+  color: var(--txt-color);
 }
 
 .layout__content {
-  padding-left: $sidebar-width;
-  background-color: $second-bg;
+  padding-left: var(--sidebar-width);
+  background-color: var(--second-bg);
   min-height: 100vh;
 }
 
