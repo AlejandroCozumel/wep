@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@import "./breakpoints.scss";
+@import "./variables.scss";
+@import "./grid.scss";
+@import "./thememenu.scss";
+
+@import "./layout.scss";
+@import "./sidebar.scss";
+@import "./topnav.scss";
+@import "./dropdown.scss";
+@import "./home.scss";
+@import "./statuscard.scss";
+@import "./table.scss";
+@import "./badge.scss";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.7px;
+}
+
+a {
+  color: unset;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $main-color;
+
+}
+
+button {
+  border: 0;
+  outline: 0;
+  color: $txt-color;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+}
+
+input {
+  border: 2px solid transparent;
+  outline: 0;
+}
+
+input:focus {
+  border: 2px solid $main-color;
+}
+
+h2 {
+  margin-bottom: 20px !important;
+}
+
+.light-background {
+  background-color: $main-bg-light;
+  color: #000;
+}
+
+.dark-background {
+  background-color: $main-bg-dark;
+  color: #fff;
+}
+
+.blue-color {
+  background-color: $main-color-blue;
+  color: #fff;
+}
+
+.red-color {
+  background-color: $main-color-red;
+  color: #fff;
+}
+
+.cyan-color {
+  background-color: $main-color-cyan;
+  color: #fff;
+}
+
+.green-color {
+  background-color: $main-color-green;
+  color: #fff;
+}
+
+.orange-color {
+  background-color: $main-color-orange;
+  color: #fff;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
