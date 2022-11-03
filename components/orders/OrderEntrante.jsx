@@ -86,14 +86,14 @@ const OrderEntrante = ({ params }) => {
     RollbackOrderMutation.mutate(id);
   };
 
-  let color = "lightcoral";
+  let color = "#ff4a6b";
 
   if (params === "ENTRANTE") {
-    color = "lightgray";
+    color = "#4caf50";
   } else if (params === "ACEPTADO") {
-    color = "lightblue";
+    color = "#62b4ff";
   } else if (params === "PREPARANDO") {
-    color = "lightyellow";
+    color = "#fca11a";
   }
 
   return (

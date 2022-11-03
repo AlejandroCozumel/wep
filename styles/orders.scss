@@ -59,22 +59,23 @@
     display: flex;
     justify-content: space-between;
     color: white;
-    .regresar, .continuar{
-      background-color: #FF6863;
-      border-radius: var(--border-radius);
-      padding: 5px 15px;
-      font-weight: 600;
-    }
-    .continuar{
-      background-color: #00C04B;
-    }
-    .regresar:hover{
-      background-color: red;
-    }
-    .continuar:hover{
-      background-color: green;
-    }
   }
+}
+
+.regresar, .continuar{
+  background-color: #FF6863;
+  border-radius: var(--border-radius);
+  padding: 5px 15px;
+  font-weight: 600;
+}
+.continuar{
+  background-color: #00C04B;
+}
+.regresar:hover{
+  background-color: red;
+}
+.continuar:hover{
+  background-color: green;
 }
 
 .order-container::before {
