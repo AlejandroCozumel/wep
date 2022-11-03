@@ -1,0 +1,116 @@
+.orders {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 20px;
+  .order-main-container {
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    padding: 0 10px;
+    background: var(--second-bg);
+    h4 {
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+      color: black;
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+    .order-container {
+      border: 1px solid lightgray;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--main-bg);
+      box-shadow: var(--box-shadow);
+      border-radius: var(--border-radius);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      transition: transform 0.3s ease 0s;
+      margin-bottom: 30px;
+      .order-container__info {
+        flex-grow: 1;
+        text-align: left;
+        z-index: 1;
+        text-transform: capitalize;
+        h4 {
+          font-size: 2.5rem;
+          margin-bottom: 10px;
+        }
+        .order-container__info__client {
+          display: flex;
+          justify-content: space-between;
+        }
+        .order-container__info__list {
+          ul {
+            list-style: square;
+            list-style-position: inside;
+            b {
+              padding-right: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .order-container__buttons{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    .regresar, .continuar{
+      background-color: #FF6863;
+      border-radius: var(--border-radius);
+      padding: 5px 15px;
+      font-weight: 600;
+    }
+    .continuar{
+      background-color: #00C04B;
+    }
+    .regresar:hover{
+      background-color: red;
+    }
+    .continuar:hover{
+      background-color: green;
+    }
+  }
+}
+
+.order-container::before {
+  content: "";
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 50%;
+  background-image: linear-gradient(
+    to top right,
+    var(--main-color),
+    var(--second-color)
+);
+  position: absolute;
+  left: -50%;
+  top: 0;
+  transform: scale(0);
+  transition: transform 0.6s ease 0s;
+}
+
+.order-container:hover::before {
+  transform: scale(3);
+}
+
+.order-container:hover {
+  color: var(--txt-white);
+  transform: scale(1.05);
+}
+
+@include media("<=laptop") {
+  .orders {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include media("<tablet") {
+  .orders {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

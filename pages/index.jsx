@@ -156,7 +156,7 @@ const renderOrderBody = (item, index) => (
   </tr>
 );
 
-export default function Home() {
+export default function DashboardHome() {
   return (
     <Layout>
       <div className="page-header">

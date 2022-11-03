@@ -10,7 +10,7 @@ import user_menu from "../../assets/JsonData/user_menus.json";
 import Image from "next/image";
 
 const curr_user = {
-  display_name: "Tuat Tran",
+  display_name: "Mr Tomato",
   image: user_image,
 };
 

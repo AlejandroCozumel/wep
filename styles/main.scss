@@ -13,6 +13,7 @@
 @import "./statuscard.scss";
 @import "./table.scss";
 @import "./badge.scss";
+@import "./orders.scss";
 
 * {
   box-sizing: border-box;
@@ -96,6 +97,24 @@ h2 {
 .orange-color {
   background-color: var(--main-color-orange);
   color: #fff;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  margin: 30px 0;
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
 }
 
 @tailwind base;

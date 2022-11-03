@@ -5,19 +5,24 @@
         "icon": "bx bx-category-alt"
     },
     {
-        "display_name": "Customers",
-        "route": "/customers",
-        "icon": "bx bx-user-pin"
+        "display_name": "Ordenes",
+        "route": "/orders",
+        "icon": "bx bx-cart"
     },
     {
-        "display_name": "Products",
+        "display_name": "Productos",
         "route": "/products",
         "icon": "bx bx-package"
     },
     {
-        "display_name": "Orders",
-        "route": "/orders",
-        "icon": "bx bx-cart"
+        "display_name": "Roles",
+        "route": "/roles",
+        "icon": "bx bx-user-plus"
+    },
+    {
+        "display_name": "clientes",
+        "route": "/customers",
+        "icon": "bx bx-user-pin"
     },
     {
         "display_name": "Analytics",

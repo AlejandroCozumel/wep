@@ -48,3 +48,21 @@
   );
   color: var(--txt-white);
 }
+
+@include media("<=laptop") {
+  .sidebar {
+    min-width: 30px;
+    padding-top: 100px;
+    .sidebar__logo{
+        display: none;
+    }
+  }
+  .sidebar__item{
+    padding: 0;
+  }
+  .sidebar__item-inner{
+    span{
+      display: none;
+    }
+  }
+}
