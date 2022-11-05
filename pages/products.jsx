@@ -235,9 +235,9 @@ const Products = () => {
     },
   });
 
-  const hanleClick = () => {
-    UpdateOrderMutation.mutate();
-  };
+  // const handleClick = () => {
+  //   UpdateOrderMutation.mutate();
+  // };
 
   if (isLoading) {
     return <div className="loading-spinner"></div>;
@@ -288,6 +288,14 @@ const Products = () => {
 
   const handleClickDelete = () => {
     deleteCategoryModal();
+  };
+
+  const handleSelect = (e) => {
+    setSelectedOption(e);
+    setTimeout(() => {
+      UpdateOrderMutation.mutate();
+    }, 100);
+
   };
 
   const handleSubmit = () => {
@@ -349,16 +357,18 @@ const Products = () => {
         <h2>Categorias:</h2>
         <Select
           defaultValue={selectedOption}
-          onChange={setSelectedOption}
+          // onChange={setSelectedOption}
+          onChange={handleSelect}
           options={product?.storeCategories?.map((select) => ({
             label: select.name,
             value: select.id,
           }))}
         />
-        <button className="continuar" onClick={hanleClick}>
+        {/* <button className="continuar" onClick={handleClick}>
           Aceptar
-        </button>
+        </button> */}
         <div>
+          <br/>
           <i
             style={{ marginBottom: "20px", marginTop: "-10px" }}
             onClick={handleClickAgregarCategoria}
