@@ -6,8 +6,6 @@ export default function MyModal({
   title,
   children,
   isOpen,
-  onSubmit,
-  submitText,
   onClose,
   cancelText,
 }) {
@@ -54,7 +52,6 @@ export default function MyModal({
                   <div className="mt-2 pt-2">{children}</div>
 
                   <div className="mt-4 flex flex-col">
-                    <div className="flex justify-between">
                       <button
                         type="button"
                         className="rounded-sm px-4 py-2 text-sm font-medium bg-red-500 text-gray-200 hover:bg-red-900 hover:text-gray-200 focus:outline-none"
@@ -62,14 +59,13 @@ export default function MyModal({
                       >
                         {cancelText}
                       </button>
-                      <button
+                      {/* <button
                         type="button"
                         className="rounded-sm px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none"
                         onClick={onSubmit}
                       >
                         {submitText}
-                      </button>
-                    </div>
+                      </button> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

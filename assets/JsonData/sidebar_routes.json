@@ -11,28 +11,28 @@
     },
     {
         "display_name": "Productos",
-        "route": "/products",
+        "route": "/productos",
         "icon": "bx bx-package"
     },
     {
         "display_name": "Roles",
-        "route": "/roles",
+        "route": "/rol",
         "icon": "bx bx-user-plus"
     },
     {
-        "display_name": "clientes",
-        "route": "/customers",
-        "icon": "bx bx-user-pin"
+        "display_name": "Cupones",
+        "route": "/cupones",
+        "icon": "bx bx-gift"
     },
     {
-        "display_name": "Analytics",
-        "route": "/analytics",
-        "icon": "bx bx-bar-chart-alt"
+        "display_name": "Medida",
+        "route": "/measurments",
+        "icon": "bx bx-calculator"
     },
     {
-        "display_name": "categories",
-        "route": "/categories",
-        "icon": "bx bx-list-ol"
+        "display_name": "Whatsapp",
+        "route": "/qr",
+        "icon": "bx bx-qr-scan"
     },
     {
         "display_name": "discount",
@@ -41,7 +41,7 @@
     },
     {
         "display_name": "inventory",
-        "route": "/inventory",
+        "route": "/customers",
         "icon": "bx bx-store-alt"
     },
     {

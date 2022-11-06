@@ -11,7 +11,7 @@ const OrderEntrante = ({ params }) => {
     return data;
   };
 
-  const peticionUpdateFn = async (id) => {
+  const peticionUpdateFn = async (item) => {
     let update = "ENTRANTE";
     if (params === "ENTRANTE") {
       update = "ACEPTADO";
@@ -22,15 +22,17 @@ const OrderEntrante = ({ params }) => {
     }
     const { data } = await myAxios({
       method: "put",
-      url: `/orders/status/${id}`,
+      url: `/orders/status/${item.id}`,
       data: {
         orderStatus: update,
+        costHomeService: item.costHomeService,
       },
     });
     return data;
   };
 
-  const peticionRollbackUpdateFn = async (id) => {
+  const peticionRollbackUpdateFn = async (item) => {
+    console.log(item)
     let update = "ENTRANTE";
     if (params === "ACEPTADO") {
       update = "ENTRANTE";
@@ -41,9 +43,10 @@ const OrderEntrante = ({ params }) => {
     }
     const { data } = await myAxios({
       method: "put",
-      url: `/orders/status/${id}`,
+      url: `/orders/status/${item.id}`,
       data: {
         orderStatus: update,
+        costHomeService: item.costHomeService,
       },
     });
     return data;
@@ -102,7 +105,7 @@ const OrderEntrante = ({ params }) => {
         <h4 style={{ background: color }}>{params}</h4>
         {orders?.map((users, id) => (
           <>
-            <div className="order-container" key={id}>
+            <div  key={id} className="order-container">
               <div className="order-container__info">
                 <div className="order-container__info__client">
                   <span>
@@ -155,13 +158,13 @@ const OrderEntrante = ({ params }) => {
                 <div className="order-container__buttons">
                   <button
                     className="regresar"
-                    onClick={() => handleRollbackOrder(users.id)}
+                    onClick={() => handleRollbackOrder(users)}
                   >
                     Regresar
                   </button>
                   <button
                     className="continuar"
-                    onClick={() => handleUpdateOrder(users.id)}
+                    onClick={() => handleUpdateOrder(users)}
                   >
                     Continuar
                   </button>

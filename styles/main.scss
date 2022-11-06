@@ -38,7 +38,6 @@ a {
 
 a:hover {
   color: var(--main-color);
-
 }
 
 button {
@@ -62,8 +61,12 @@ input:focus {
 }
 
 h2 {
-  margin-bottom: 20px !important;
+  margin: 0 !important;
 }
+
+.subtitle {
+  padding-bottom: 20px ;
+ }
 
 .light-background {
   background-color: var(--main-bg-light);
@@ -118,24 +121,37 @@ h2 {
   animation: spinner 1.5s linear infinite;
 }
 
-.bx-message-square-add{
+.bx-message-square-add {
   cursor: pointer;
   font-size: 2rem;
   color: var(--second-color-orange);
 }
-.bx-message-square-add:hover{
+.bx-message-square-add:hover {
   color: var(--main-color-orange);
   transform: scale(1.1);
 }
 
-.bx-trash{
+.bx-trash {
   cursor: pointer;
   font-size: 2rem;
   color: var(--second-color-red);
 }
-.bx-trash:hover{
+.bx-trash:hover {
   color: var(--main-color-red);
   transform: scale(1.1);
+}
+.bx-edit{
+  cursor: pointer;
+  font-size: 2rem;
+  color: var(--second-color-green);
+}
+.bx-edit:hover {
+  color: var(--main-color-green);
+  transform: scale(1.1);
+}
+
+.basic-multi-select{
+  z-index: 2;
 }
 
 @tailwind base;

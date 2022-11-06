@@ -12,6 +12,7 @@ import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const baseUrl = "https://api.wep.mx/";
+const baseImage = "https://api.wep.mx";
 
 const optionDays = [
   { value: 1, label: "Lunes" },
@@ -205,11 +206,14 @@ const Products = () => {
     error: errorMeasurmentUnits,
   } = useQuery(["measurmentUnits"], peticionGetMeasurmentUnits);
 
-  const UpdateOrderMutation = useMutation(peticionGetIndividualProducts, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("categories");
-    },
-  });
+  const GetIndividualProductMutation = useMutation(
+    peticionGetIndividualProducts,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("categories");
+      },
+    }
+  );
 
   const DeleteOrderMutation = useMutation(peticionDeleteIndividualProducts, {
     onSuccess: () => {
@@ -234,10 +238,6 @@ const Products = () => {
       queryClient.invalidateQueries("categories");
     },
   });
-
-  // const handleClick = () => {
-  //   UpdateOrderMutation.mutate();
-  // };
 
   if (isLoading) {
     return <div className="loading-spinner"></div>;
@@ -293,9 +293,8 @@ const Products = () => {
   const handleSelect = (e) => {
     setSelectedOption(e);
     setTimeout(() => {
-      UpdateOrderMutation.mutate();
+      GetIndividualProductMutation.mutate();
     }, 100);
-
   };
 
   const handleSubmit = () => {
@@ -314,21 +313,33 @@ const Products = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData({
+      ...formData,
       [name]: value,
       isPromotional: enabled,
-      measurementUnitId: selectedMeasurement?.value,
+      // measurementUnitId: selectedMeasurement?.value,
       storeCategoryId: selectedOption?.value,
-      promotionDay: selectedDays?.value,
+      // promotionDay: selectedDays?.value,
       productVariants: [],
-    }));
+    });
   };
 
-  //Add select on change
-  // const handleChangeSelect = async ({action, value}) => {
-  //   setFormData({ ...formData, [action.name]: value });
-  // };
+
+  const handleChangeSelectMeasurment = (e) => {
+    setFormData({ ...formData, measurementUnitId: e.value});
+  };
+
+  const handleChangeSelectDays = (e) => {
+    setFormData({ ...formData, promotionDay: e.value});
+  };
+
+
+  // console.log("form",formData);
+  // console.log("producto product selected", idProduct);
+  // console.log("product category selected", selectedProduct);
+  // console.log("datafromback",product)
+  // console.log("measurmentidfrombackend",dataMeasurmentUnits)
+
 
   //Add image to base 64
   const convertToBase64 = (file) => {
@@ -355,20 +366,19 @@ const Products = () => {
     <Layout>
       <div className={`page-header product-container`}>
         <h2>Categorias:</h2>
+        <div className="subtitle">
+          Ve la lista de productos, edita, habilita/deshabilita o agrega nuevos
+        </div>
         <Select
           defaultValue={selectedOption}
-          // onChange={setSelectedOption}
           onChange={handleSelect}
           options={product?.storeCategories?.map((select) => ({
             label: select.name,
             value: select.id,
           }))}
         />
-        {/* <button className="continuar" onClick={handleClick}>
-          Aceptar
-        </button> */}
         <div>
-          <br/>
+          <br />
           <i
             style={{ marginBottom: "20px", marginTop: "-10px" }}
             onClick={handleClickAgregarCategoria}
@@ -435,20 +445,83 @@ const Products = () => {
             </div>
           ))}
         </div>
-        {showModalEditar ? (
+        {showModalEditar && (
           <MyModal
-            title="🥳 Modal Editar"
-            onSubmit={handleSubmit}
+            title={`Edita el producto seleccionado:`}
+            // onSubmit={handleSubmitAddProduct}
             isOpen={true}
             submitText="Aceptar"
             cancelText="Cancelar"
             onClose={() => setShowModalEditar(false)}
           >
-            <form action="">
-              <input type="text" placeholder="hoola" />
+            <form className="form">
+              <label htmlFor="category">Nombre de la producto:</label>
+              <input
+                type="text"
+                id="category"
+                name="name"
+                placeholder="Nombre"
+                onChange={handleChange}
+                required
+                value={idProduct.name}
+              />
+              <label htmlFor="price">Precio producto:</label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                placeholder="$ precio"
+                onChange={handleChange}
+                required
+                value={idProduct.price}
+              />
+              <label htmlFor="">Unidad de medida:</label>
+              <Select
+                name="measurementUnitId"
+                defaultValue=""
+                onChange={handleChangeSelectMeasurment}
+                options={dataMeasurmentUnits?.map((mesurement) => ({
+                  label: mesurement.name,
+                  value: mesurement.id,
+                }))}
+              />
+              <label htmlFor="">Dia de promocion:</label>
+              <Select
+                defaultValue=""
+                onChange={handleChangeSelectDays}
+                options={optionDays}
+              />
+              <label htmlFor="type">Tipo:</label>
+              <input
+                type="text"
+                id="type"
+                name="type"
+                placeholder="Comida, Bebidas, Extras"
+                onChange={handleChange}
+                required
+                value={idProduct.type}
+              />
+              <label htmlFor="description">Descripcion:</label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                placeholder="Descripcion del producto"
+                onChange={handleChange}
+                required
+                value={idProduct.description}
+              />
+              <input
+                type="file"
+                label="Image"
+                name="myFile"
+                accept=".jpeg, .png, .jpg"
+                required
+                onChange={handleFileUpload}
+              />
             </form>
           </MyModal>
-        ) : null}
+        )}
         {showModalAgregar && (
           <MyModal
             title={`Agrega una nueva categoria:`}
@@ -518,8 +591,8 @@ const Products = () => {
               <label htmlFor="">Unidad de medida:</label>
               <Select
                 name="measurementUnitId"
-                defaultValue={selectedMeasurement}
-                onChange={setSelectedMeasurement}
+                defaultValue=""
+                onChange={handleChangeSelectMeasurment}
                 options={dataMeasurmentUnits?.map((mesurement) => ({
                   label: mesurement.name,
                   value: mesurement.id,
@@ -527,8 +600,8 @@ const Products = () => {
               />
               <label htmlFor="">Dia de promocion:</label>
               <Select
-                defaultValue={selectedDays}
-                onChange={setSelectedDays}
+                defaultValue=""
+                onChange={handleChangeSelectDays}
                 options={optionDays}
               />
               <label htmlFor="type">Tipo:</label>
