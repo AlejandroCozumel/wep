@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { myAxios } from "../../utils/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Dropdown from "../Dropdown";
+import Dropdown from "../dropdown";
 import ThemeMenu from "../thememenu";
 import Badge from "../badge";
 
