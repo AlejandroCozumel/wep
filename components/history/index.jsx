@@ -3,7 +3,7 @@ import Table from "../table";
 // import Badge from "../badge";
 import { myAxios } from "../../utils/api";
 
-import { useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 // import MyModal from "../modal";
 
 const History = () => {
@@ -52,8 +52,8 @@ const History = () => {
       <td>{item.quantity}</td>
       <td>{item.product}</td>
       <td>{item.variant ? item.variant : "❌"}</td>
-      <td>{item.option ? item.option: "❌"}</td>
-      <td>{item.comments ? item.option: "❌"}</td>
+      <td>{item.option ? item.option : "❌"}</td>
+      <td>{item.comments ? item.option : "❌"}</td>
       {/* <td>
         <Badge type="success" content={item.status} />
       </td> */}
@@ -83,6 +83,10 @@ const History = () => {
 
   return (
     <div>
+      <div className="search">
+        <input type="text" placeholder="Search here..." />
+        <i className="bx bx-search"></i>
+      </div>
       <Table
         limit={10}
         headData={latestOrders.header}

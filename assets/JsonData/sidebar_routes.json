@@ -45,8 +45,8 @@
         "icon": "bx bx-store-alt"
     },
     {
-        "display_name": "settings",
-        "route": "/settings",
+        "display_name": "Profile",
+        "route": "/profile",
         "icon": "bx bx-cog"
     }
 ]

@@ -32,7 +32,9 @@ const Sidebar = (props) => {
   return (
     <div className="sidebar">
       <div className="sidebar__logo">
-        <Image src={logo} alt="company logo" />
+        <Link href="/profile">
+          <Image src={logo} alt="company logo" />
+        </Link>
       </div>
       {sidebar_items.map((item, index) => (
         <SidebarItems

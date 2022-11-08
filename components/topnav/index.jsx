@@ -1,8 +1,10 @@
 import React from "react";
 import Link from "next/link";
-
+import { myAxios } from "../../utils/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Dropdown from "../Dropdown";
 import ThemeMenu from "../thememenu";
+import Badge from "../badge";
 
 import notifications from "../../assets/JsonData/notification.json";
 import user_image from "../../assets/images/tuat.png";
@@ -40,11 +42,63 @@ const renderUserMenu = (item, index) => (
 );
 
 const TopNav = () => {
+  const peticionGetIsOpen = async () => {
+    const { data } = await myAxios({
+      method: "get",
+      url: `/isOpen`,
+    });
+    return data;
+  };
+
+  const peticionUpdateIsOpen = async () => {
+    const { data } = await myAxios({
+      method: "put",
+      url: `/isOpen`,
+      data: { isOpen: true },
+    });
+    return data;
+  };
+
+  const queryClient = useQueryClient();
+
+  const {
+    isLoading,
+    isError,
+    data: isOpen,
+    error,
+  } = useQuery(["isopen"], peticionGetIsOpen);
+
+  const UpdateIsOpenProductMutation = useMutation(peticionUpdateIsOpen, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("isopen");
+    },
+  });
+
+  const handleIsOpen = () => {
+    alert("hola");
+    // UpdateIsOpenProductMutation.mutate();
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   return (
     <div className="topnav">
-      <div className="topnav__search">
-        <input type="text" placeholder="Search here..." />
-        <i className="bx bx-search"></i>
+      <div>
+        {isOpen.isOpen ? (
+          <div onClick={handleIsOpen}>
+            <Badge type="success" content="Abierto" />
+          </div>
+        ) : (
+          <div onClick={handleIsOpen}>
+            <Badge type="danger" content="Cerrado" />
+          </div>
+        )}
       </div>
       <div className="topnav__right">
         <div className="topnav__right-item">

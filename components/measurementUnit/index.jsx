@@ -200,6 +200,10 @@ const Measures = () => {
         onClick={() => setShowModalAgregar(true)}
         className="bx bx-message-square-add"
       ></i>
+            <div className="search">
+        <input type="text" placeholder="Search here..." />
+        <i className="bx bx-search"></i>
+      </div>
       {isFetching && (
         <Table
           limit={10}
