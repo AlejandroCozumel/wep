@@ -1,0 +1,45 @@
+.profile {
+  display: flex;
+  width: 100%;
+  form {
+    width: 100%;
+    .grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px;
+      // column-gap: 50px;
+      form {
+        width: 100%;
+      }
+      .flex-column {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        textarea {
+          border-bottom: 2px solid var(--main-color);
+          margin: 10px 0;
+          padding: 5px 0 5px 10px;
+          transition: all 0.3s ease 0s;
+        }
+        textarea:focus {
+          border: none;
+          outline: 2px solid var(--main-color);
+          border-radius: var(--border-radius);
+        }
+      }
+    }
+  }
+}
+
+@include media("<=tablet") {
+  .profile {
+    form {
+      .grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+}

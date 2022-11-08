@@ -32,15 +32,15 @@
     {
         "display_name": "Whatsapp",
         "route": "/qr",
-        "icon": "bx bx-qr-scan"
+        "icon": "bx bxl-whatsapp"
     },
     {
-        "display_name": "discount",
-        "route": "/discount",
-        "icon": "bx bx-gift"
+        "display_name": "Historial",
+        "route": "/history",
+        "icon": "bx bx-history"
     },
     {
-        "display_name": "inventory",
+        "display_name": "Clientes",
         "route": "/customers",
         "icon": "bx bx-store-alt"
     },
