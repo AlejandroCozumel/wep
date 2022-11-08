@@ -31,6 +31,7 @@ const History = () => {
       "Variante",
       "Opcion",
       "Comentarios",
+      "Precio",
     ],
     body: historyOrdes?.map((history) => ({
       id: history.id,
@@ -40,6 +41,7 @@ const History = () => {
       variant: history.detail[0]?.variants[0]?.productVariant.name,
       option: history.detail[0]?.variants[0]?.options[0]?.optionVariant.name,
       comments: history.comments,
+      amount: history.amount,
     })),
   };
 
@@ -54,6 +56,7 @@ const History = () => {
       <td>{item.variant ? item.variant : "❌"}</td>
       <td>{item.option ? item.option : "❌"}</td>
       <td>{item.comments ? item.option : "❌"}</td>
+      <td>$ {item.amount}</td>
       {/* <td>
         <Badge type="success" content={item.status} />
       </td> */}
