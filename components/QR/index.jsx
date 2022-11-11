@@ -37,6 +37,7 @@ const Qr = () => {
 
   return (
     <div>
+      <div className="card">
       <QRCode value={qrCode.waQr} />
       <button
         style={{ padding: "15px", marginTop: "20px" }}
@@ -45,6 +46,7 @@ const Qr = () => {
       >
         Recargar QR
       </button>
+      </div>
     </div>
   );
 };
