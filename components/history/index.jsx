@@ -90,13 +90,15 @@ const History = () => {
         <input type="text" placeholder="Search here..." />
         <i className="bx bx-search"></i>
       </div>
-      <Table
-        limit={10}
-        headData={latestOrders.header}
-        renderHead={(item, index) => renderHead(item, index)}
-        bodyData={latestOrders.body}
-        renderBody={(item, index) => renderBody(item, index)}
-      />
+      <div className="card">
+        <Table
+          limit={10}
+          headData={latestOrders.header}
+          renderHead={(item, index) => renderHead(item, index)}
+          bodyData={latestOrders.body}
+          renderBody={(item, index) => renderBody(item, index)}
+        />
+      </div>
     </div>
   );
 };

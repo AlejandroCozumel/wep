@@ -3,10 +3,6 @@
   grid-template-columns: repeat(4, 1fr);
   column-gap: 20px;
   .order-main-container {
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-    padding: 0 10px;
-    background: var(--second-bg);
     h4 {
       border-radius: var(--border-radius);
       margin-top: 20px;

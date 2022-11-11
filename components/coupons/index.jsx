@@ -214,7 +214,9 @@ const Cupones = () => {
       <td>{item.name}</td>
       <td>{dateFormat(item.startDate, "dddd, mmmm dS")}</td>
       <td>{dateFormat(item.endDate, "dddd, mmmm dS")}</td>
-      <td>{item.discountType === "porcentaje" ? "%" : "$"} {item.discountImport}</td>
+      <td>
+        {item.discountType === "porcentaje" ? "%" : "$"} {item.discountImport}
+      </td>
       <td>{item.description}</td>
       <td>
         <Badge type="success" content={item.status} />
@@ -245,13 +247,15 @@ const Cupones = () => {
         <i className="bx bx-search"></i>
       </div>
       {isFetching && (
-        <Table
-          limit={5}
-          headData={latestOrders.header}
-          renderHead={(item, index) => renderOrderHead(item, index)}
-          bodyData={latestOrders.body}
-          renderBody={(item, index) => renderOrderBody(item, index)}
-        />
+        <div className="card">
+          <Table
+            limit={5}
+            headData={latestOrders.header}
+            renderHead={(item, index) => renderOrderHead(item, index)}
+            bodyData={latestOrders.body}
+            renderBody={(item, index) => renderOrderBody(item, index)}
+          />
+        </div>
       )}
       {showModalAgregar ? (
         <MyModal
@@ -327,7 +331,11 @@ const Cupones = () => {
               type="number"
               id="discountImport"
               name="discountImport"
-              placeholder={formData.discountType === "porcentaje" ? "% Porcentaje" : "$ Cantidad"}
+              placeholder={
+                formData.discountType === "porcentaje"
+                  ? "% Porcentaje"
+                  : "$ Cantidad"
+              }
               onChange={handleChange}
               required
             />

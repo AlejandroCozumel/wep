@@ -93,87 +93,85 @@ const OrderEntrante = ({ params }) => {
   console.log(costPrice);
 
   return (
-    <>
-      <div className="order-main-container">
-        <h4 style={{ background: "#4caf50" }}>{params}</h4>
-        {orders?.map((users, id) => (
-          <div key={id}>
-            <div key={id} className="order-container">
-              <div className="order-container__info">
-                <div className="order-container__info__client">
-                  <span>
-                    <b>Cliente:</b> {users.clientUser.name}
-                  </span>
-                  <span>
-                    <b>$ {users.finalAmount}</b>
-                  </span>
-                </div>
-                <div className="order-container__info__client">
-                  <span>
-                    <b>Costo de Envio:</b>
-                  </span>
-                  <select className="product-select" onChange={handleChangeCost}>
-                    <option selected=""></option>
-                    <option
-                      value={users.establishment?.costHomeService}
-                    >{`$ ${users.establishment?.costHomeService}`}</option>
-                    <option
-                      value={users.establishment?.extendHomeService}
-                    >{`$ ${users.establishment?.extendHomeService}`}</option>
-                  </select>
-                </div>
-                <div>
-                  <span>
-                    <b>Pedido: </b>
-                  </span>
-                </div>
-                <div>
-                  {users?.detail.map((detail, id) => (
-                    <div key={id} className="order-container__info__list">
-                      <ul>
-                        <li>
-                          <b>{detail.quantity}</b>
-                          {detail.product.name}
-                        </li>
-                        {detail.variants?.map((variants, id) => (
-                          <div key={id}>
-                            <ul key={id} style={{ paddingLeft: "10px" }}>
-                              <li>{variants.productVariant.name}</li>
-                            </ul>
-                            {variants.options?.map((options, id) => (
-                              <div key={id}>
-                                <ul key={id} style={{ paddingLeft: "20px" }}>
-                                  <li>{options.optionVariant.name}</li>
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        ))}
-                      </ul>
-                      <hr />
-                    </div>
-                  ))}
-                </div>
-                <div className="order-container__buttons">
-                  <button
-                    className="regresar"
-                    onClick={() => handleRollbackOrder(users)}
-                  >
-                    Regresar
-                  </button>
-                  <button
-                    className="continuar"
-                    onClick={() => handleChangeCreateOrder(users)}
-                  >
-                    Continuar
-                  </button>
-                </div>
+    <div className="order-main-container">
+      <h4 style={{ background: "#4caf50" }}>{params}</h4>
+      {orders?.map((users, id) => (
+        <div className="card" key={id}>
+          <div key={id} className="order-container">
+            <div className="order-container__info">
+              <div className="order-container__info__client">
+                <span>
+                  <b>Cliente:</b> {users.clientUser.name}
+                </span>
+                <span>
+                  <b>$ {users.finalAmount}</b>
+                </span>
+              </div>
+              <div className="order-container__info__client">
+                <span>
+                  <b>Costo de Envio:</b>
+                </span>
+                <select className="product-select" onChange={handleChangeCost}>
+                  <option selected=""></option>
+                  <option
+                    value={users.establishment?.costHomeService}
+                  >{`$ ${users.establishment?.costHomeService}`}</option>
+                  <option
+                    value={users.establishment?.extendHomeService}
+                  >{`$ ${users.establishment?.extendHomeService}`}</option>
+                </select>
+              </div>
+              <div>
+                <span>
+                  <b>Pedido: </b>
+                </span>
+              </div>
+              <div>
+                {users?.detail.map((detail, id) => (
+                  <div key={id} className="order-container__info__list">
+                    <ul>
+                      <li>
+                        <b>{detail.quantity}</b>
+                        {detail.product.name}
+                      </li>
+                      {detail.variants?.map((variants, id) => (
+                        <div key={id}>
+                          <ul key={id} style={{ paddingLeft: "10px" }}>
+                            <li>{variants.productVariant.name}</li>
+                          </ul>
+                          {variants.options?.map((options, id) => (
+                            <div key={id}>
+                              <ul key={id} style={{ paddingLeft: "20px" }}>
+                                <li>{options.optionVariant.name}</li>
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </ul>
+                    <hr />
+                  </div>
+                ))}
+              </div>
+              <div className="order-container__buttons">
+                <button
+                  className="regresar"
+                  onClick={() => handleRollbackOrder(users)}
+                >
+                  Regresar
+                </button>
+                <button
+                  className="continuar"
+                  onClick={() => handleChangeCreateOrder(users)}
+                >
+                  Continuar
+                </button>
               </div>
             </div>
           </div>
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 };
 

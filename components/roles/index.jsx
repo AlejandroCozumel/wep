@@ -222,6 +222,7 @@ const Roles = () => {
         className="bx bx-message-square-add"
       ></i>
       {isFetching && (
+        <div className="card">
         <Table
           limit={5}
           headData={latestOrders.header}
@@ -229,6 +230,7 @@ const Roles = () => {
           bodyData={latestOrders.body}
           renderBody={(item, index) => renderOrderBody(item, index)}
         />
+        </div>
       )}
       {showModalAgregar ? (
         <MyModal

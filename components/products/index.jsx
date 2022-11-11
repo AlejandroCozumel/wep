@@ -438,7 +438,6 @@ const Products = () => {
     }, 1000);
   };
 
-
   console.log("subvariante", formDataSubvariant);
   console.log("costo", costGenerate);
   console.log("cantidad", quantifySelect);
@@ -554,14 +553,16 @@ const Products = () => {
 
   return (
     <>
-      <Select
-        defaultValue={selectedOption}
-        onChange={handleSelect}
-        options={product?.storeCategories?.map((select) => ({
-          label: select.name,
-          value: select.id,
-        }))}
-      />
+      <div className="card">
+        <Select
+          defaultValue={selectedOption}
+          onChange={handleSelect}
+          options={product?.storeCategories?.map((select) => ({
+            label: select.name,
+            value: select.id,
+          }))}
+        />
+      </div>
       <div>
         <br />
         <i
@@ -586,7 +587,7 @@ const Products = () => {
 
         {selectedProduct?.products?.map((item) => (
           <div className="product-container__item" key={item.id}>
-            <>
+            <div  className="card">
               <div
                 onClick={() => handleItem(item)}
                 className="product-container__list-item"
@@ -626,7 +627,7 @@ const Products = () => {
                   </div>
                 </div>
               )}
-            </>
+            </div>
           </div>
         ))}
       </div>
@@ -1127,21 +1128,19 @@ const Products = () => {
                         />
                       </Switch>
                       {costGenerate && (
-                          <>
-                            <label htmlFor="unitPrice">
-                            Precio unitario:
-                            </label>
-                            <input
-                              type="number"
-                              id="unitPrice"
-                              name="unitPrice"
-                              placeholder="Precio unitario:"
-                              onChange={handleChangeAddSubvariant}
-                              required
-                              value={formDataSubvariant.unitPrice}
-                            />
-                          </>
-                        )}
+                        <>
+                          <label htmlFor="unitPrice">Precio unitario:</label>
+                          <input
+                            type="number"
+                            id="unitPrice"
+                            name="unitPrice"
+                            placeholder="Precio unitario:"
+                            onChange={handleChangeAddSubvariant}
+                            required
+                            value={formDataSubvariant.unitPrice}
+                          />
+                        </>
+                      )}
                       <span>
                         ¿El cliente debe marcar la cantidad a cargar a la
                         compra?

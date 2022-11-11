@@ -209,13 +209,15 @@ const Measures = () => {
         <i className="bx bx-search"></i>
       </div>
       {isFetching && (
-        <Table
-          limit={10}
-          headData={latestOrders.header}
-          renderHead={(item, index) => renderOrderHead(item, index)}
-          bodyData={latestOrders.body}
-          renderBody={(item, index) => renderOrderBody(item, index)}
-        />
+        <div className="card">
+          <Table
+            limit={10}
+            headData={latestOrders.header}
+            renderHead={(item, index) => renderOrderHead(item, index)}
+            bodyData={latestOrders.body}
+            renderBody={(item, index) => renderOrderBody(item, index)}
+          />
+        </div>
       )}
       {showModalAgregar ? (
         <MyModal

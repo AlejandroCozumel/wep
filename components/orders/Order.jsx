@@ -106,7 +106,7 @@ const Orders = ({ params }) => {
       <div className="order-main-container">
         <h4 style={{ background: color }}>{params}</h4>
         {orders?.map((users, id) => (
-          <div key={id}>
+          <div className="card" key={id}>
             <div key={id} className="order-container">
               <div className="order-container__info">
                 <div className="order-container__info__client">
