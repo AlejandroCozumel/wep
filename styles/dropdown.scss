@@ -1,6 +1,6 @@
 .dropdown {
   position: relative;
-  z-index: 99;
+  z-index: 10;
   .dropdown__content {
     position: absolute;
     top: calc(100% + 5px);

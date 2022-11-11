@@ -157,7 +157,7 @@ const Measures = () => {
   const handleChangeDeleteId = (item) => {
     deleteModal(item);
   };
-  // console.log(measurementUnits);
+
   const latestOrders = {
     header: ["ID", "Nombre", "Abreviación", , "Status", "Acción"],
     body: measurementUnits?.map((units) => ({
@@ -166,6 +166,11 @@ const Measures = () => {
       abbreviation: units.abbreviation,
       status: units.status.toString(),
     })),
+  };
+
+  const handleShowModalAgregar = () => {
+    setShowModalAgregar(false);
+    setFormData("");
   };
 
   const renderOrderHead = (item, index) => <th key={index}>{item}</th>;
@@ -184,7 +189,6 @@ const Measures = () => {
           onClick={() => handleChangeEditId(item)}
           className="bx bx-edit"
         ></i>
-        {/* {console.log(item)} */}
         <i
           onClick={() => handleChangeDeleteId(item)}
           className="bx bx-trash"
@@ -200,7 +204,7 @@ const Measures = () => {
         onClick={() => setShowModalAgregar(true)}
         className="bx bx-message-square-add"
       ></i>
-            <div className="search">
+      <div className="search">
         <input type="text" placeholder="Search here..." />
         <i className="bx bx-search"></i>
       </div>
@@ -218,7 +222,7 @@ const Measures = () => {
           title="Crea una nueva Unidad de medida"
           isOpen={true}
           cancelText="Cancelar"
-          onClose={() => setShowModalAgregar(false)}
+          onClose={handleShowModalAgregar}
         >
           <form onSubmit={handleSubmit} className="form">
             <label htmlFor="name">Nombre de la medida:</label>

@@ -171,6 +171,11 @@ const Roles = () => {
     deleteModal(item);
   };
 
+  const handleShowModalAgregar = () => {
+    setShowModalAgregar(false);
+    setFormData("");
+  }
+
   const latestOrders = {
     header: ["ID", "Rol", "Descripción", "Tipo", "Status", "Acción"],
     body: userRol?.map((rol) => ({
@@ -201,7 +206,6 @@ const Roles = () => {
           onClick={() => handleChangeEditId(item)}
           className="bx bx-edit"
         ></i>
-        {/* {console.log(item)} */}
         <i
           onClick={() => handleChangeDeleteId(item)}
           className="bx bx-trash"
@@ -231,7 +235,7 @@ const Roles = () => {
           title="Crea un nuevo rol"
           isOpen={true}
           cancelText="Cancelar"
-          onClose={() => setShowModalAgregar(false)}
+          onClose={handleShowModalAgregar}
         >
           <form onSubmit={handleSubmit} className="form">
             <label htmlFor="">Menús de acceso:</label>

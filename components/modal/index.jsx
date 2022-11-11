@@ -8,12 +8,15 @@ export default function MyModal({
   isOpen,
   onClose,
   cancelText,
+  fullScreen
 }) {
   const [showModal, setShowModal] = useState(isOpen);
 
   function closeModal() {
     onClose();
   }
+
+  const windowSize = fullScreen ? "w-[80vw] transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all z-50" : "w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all z-50";
 
   return (
     <>
@@ -42,7 +45,7 @@ export default function MyModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className={windowSize}>
                   <Dialog.Title
                     as="h3"
                     className="text-xl text-bold font-medium leading-6 text-gray-900"

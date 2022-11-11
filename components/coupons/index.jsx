@@ -2,13 +2,26 @@ import React, { useState } from "react";
 import Table from "../table";
 import Badge from "../badge";
 import { myAxios } from "../../utils/api";
+import dateFormat from "dateformat";
 
 import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import MyModal from "../modal";
 import Swal from "sweetalert2";
 
+const discountType = [
+  { value: "porcentaje", label: "Porcentaje" },
+  { value: "dinero", label: "Dinero" },
+];
+
+const serviceType = [
+  { value: "ordene", label: "Ordene y recoja" },
+  { value: "domicilio", label: "A domicilio" },
+  { value: "Ambos", label: "Ambos" },
+];
+
 const Cupones = () => {
+  const [selectedDiscount, setSelectedDiscount] = useState(null);
   const [showModalAgregar, setShowModalAgregar] = useState(false);
   const [showModalEditar, setShowModalEditar] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -37,6 +50,25 @@ const Cupones = () => {
     return data;
   };
 
+  const peticionUpdateCoupon = async (indexRol) => {
+    try {
+      const { data } = await myAxios({
+        method: "put",
+        url: `/coupons/${indexRol.id}`,
+        data: indexRol,
+      });
+      Swal.fire(`Cupon ${indexRol.name} editado`, "", "success");
+      setIsFetching(false);
+      setFormData("");
+      setTimeout(() => {
+        setIsFetching(true);
+      }, 500);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const peticionDeleteCoupon = async (indexRol) => {
     try {
       const { data } = await myAxios({
@@ -58,10 +90,10 @@ const Cupones = () => {
     try {
       const { data } = await myAxios({
         method: "post",
-        url: `/roles`,
+        url: `/coupons`,
         data: formData,
       });
-      Swal.fire(`Rol agregado`, "", "success");
+      Swal.fire(`Coupon agregado`, "", "success");
       setIsFetching(false);
       setTimeout(() => {
         setIsFetching(true);
@@ -80,6 +112,12 @@ const Cupones = () => {
     data: userCoupons,
     error,
   } = useQuery(["getcoupon"], peticionGetCouopon);
+
+  const UpdateCouponMutation = useMutation(peticionUpdateCoupon, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getcoupon");
+    },
+  });
 
   const DeleteCouponMutation = useMutation(peticionDeleteCoupon, {
     onSuccess: () => {
@@ -107,7 +145,8 @@ const Cupones = () => {
   };
 
   const handleSubmitEditar = () => {
-    alert("editar");
+    UpdateCouponMutation.mutate(formData);
+    setShowModalEditar(false);
   };
 
   const handleChange = (e) => {
@@ -119,7 +158,11 @@ const Cupones = () => {
   };
 
   const handleChangeSelect = (e) => {
-    setFormData({ ...formData, menusId: e?.map((item) => item.value) });
+    setFormData({ ...formData, discountType: e.value });
+  };
+
+  const handleChangeSelectType = (e) => {
+    setFormData({ ...formData, serviceType: e.value });
   };
 
   const handleChangeEditId = (item) => {
@@ -128,9 +171,14 @@ const Cupones = () => {
   };
 
   const handleChangeDeleteId = (item) => {
-    console.log(item);
     deleteModal(item);
   };
+
+  const handleModalAgregar = () => {
+    setFormData("");
+    setShowModalAgregar(false);
+  };
+
   const latestOrders = {
     header: [
       "ID",
@@ -164,9 +212,9 @@ const Cupones = () => {
     <tr key={index}>
       <td>{item.id}</td>
       <td>{item.name}</td>
-      <td>{item.startDate}</td>
-      <td>{item.endDate}</td>
-      <td>% {item.discountImport}</td>
+      <td>{dateFormat(item.startDate, "dddd, mmmm dS")}</td>
+      <td>{dateFormat(item.endDate, "dddd, mmmm dS")}</td>
+      <td>{item.discountType === "porcentaje" ? "%" : "$"} {item.discountImport}</td>
       <td>{item.description}</td>
       <td>
         <Badge type="success" content={item.status} />
@@ -177,7 +225,6 @@ const Cupones = () => {
           onClick={() => handleChangeEditId(item)}
           className="bx bx-edit"
         ></i>
-        {/* {console.log(item)} */}
         <i
           onClick={() => handleChangeDeleteId(item)}
           className="bx bx-trash"
@@ -193,7 +240,7 @@ const Cupones = () => {
         onClick={() => setShowModalAgregar(true)}
         className="bx bx-message-square-add"
       ></i>
-            <div className="search">
+      <div className="search">
         <input type="text" placeholder="Search here..." />
         <i className="bx bx-search"></i>
       </div>
@@ -209,20 +256,11 @@ const Cupones = () => {
       {showModalAgregar ? (
         <MyModal
           title="Crea un nuevo Cupon"
-          onSubmit={handleSubmit}
           isOpen={true}
-          submitText="Aceptar"
           cancelText="Cancelar"
-          onClose={() => setShowModalAgregar(false)}
+          onClose={handleModalAgregar}
         >
-          <form className="form">
-            {/* <label htmlFor="">Menús de acceso:</label>
-            <Select
-              isMulti
-              defaultValue=""
-              onChange={handleChangeSelect}
-              options={options}
-            /> */}
+          <form onSubmit={handleSubmit} className="form">
             <label htmlFor="name">Nombre del cupon:</label>
             <input
               type="text"
@@ -264,7 +302,7 @@ const Cupones = () => {
               type="number"
               id="useLimitUser"
               name="useLimitUser"
-              placeholder="useLimitUser"
+              placeholder="Limite por usuario"
               onChange={handleChange}
               required
             />
@@ -273,66 +311,56 @@ const Cupones = () => {
               type="number"
               id="fromAmount"
               name="fromAmount"
-              placeholder="fromAmount"
+              placeholder="A partir de"
               onChange={handleChange}
               required
             />
             <label htmlFor="discountType">Tipo de descuento:</label>
-            <input
-              type="number"
-              id="discountType"
+            <Select
               name="discountType"
-              placeholder="discountType"
-              onChange={handleChange}
-              required
+              defaultValue=""
+              onChange={handleChangeSelect}
+              options={discountType}
             />
-            <label htmlFor="discountType">Descuento:</label>
+            <label htmlFor="discountImport">Descuento:</label>
             <input
               type="number"
               id="discountImport"
               name="discountImport"
-              placeholder="discountImport"
+              placeholder={formData.discountType === "porcentaje" ? "% Porcentaje" : "$ Cantidad"}
               onChange={handleChange}
               required
             />
             <label htmlFor="serviceType">Tipo de servicio:</label>
-            <input
-              type="text"
-              id="serviceType"
+            <Select
               name="serviceType"
-              placeholder="serviceType"
-              onChange={handleChange}
-              required
+              defaultValue=""
+              onChange={handleChangeSelectType}
+              options={serviceType}
             />
             <label htmlFor="quantify">Cupones a dar:</label>
             <input
               type="number"
               id="quantify"
               name="quantify"
-              placeholder="quantify"
+              placeholder="Cantidad de cupones"
               onChange={handleChange}
               required
             />
+            <button className="rounded-sm mt-3 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none">
+              Aceptar
+            </button>
           </form>
         </MyModal>
       ) : null}
       {showModalEditar ? (
         <MyModal
           title="Edita el Cupon seleccionado"
-          onSubmit={handleSubmit}
           isOpen={true}
-          submitText="Aceptar"
           cancelText="Cancelar"
           onClose={() => setShowModalEditar(false)}
         >
-          <form className="form">
-            {/* <label htmlFor="">Menús de acceso:</label>
-          <Select
-            isMulti
-            defaultValue=""
-            onChange={handleChangeSelect}
-            options={options}
-          /> */}
+          <form onSubmit={handleSubmitEditar} className="form">
             <label htmlFor="name">Nombre del cupon:</label>
             <input
               type="text"
@@ -360,7 +388,7 @@ const Cupones = () => {
               name="startDate"
               placeholder="startDate"
               onChange={handleChange}
-              value={formData.startDate}
+              value={dateFormat(formData.startDate, "yyyy-mm-dd")}
               required
             />
             <label htmlFor="endDate">Fecha de fin:</label>
@@ -370,7 +398,7 @@ const Cupones = () => {
               name="endDate"
               placeholder="endDate"
               onChange={handleChange}
-              value={formData.endDate}
+              value={dateFormat(formData.endDate, "yyyy-mm-dd")}
               required
             />
             <label htmlFor="useLimitUser">Limite de uso por usuario:</label>
@@ -394,14 +422,14 @@ const Cupones = () => {
               required
             />
             <label htmlFor="discountType">Tipo de descuento:</label>
-            <input
-              type="text"
-              id="discountType"
+            <Select
               name="discountType"
-              placeholder="discountType"
-              onChange={handleChange}
-              value={formData.discountType}
-              required
+              defaultValue={{
+                label: formData.discountType,
+                value: formData.discountType,
+              }}
+              onChange={handleChangeSelect}
+              options={discountType}
             />
             <label htmlFor="discountType">Descuento:</label>
             <input
@@ -414,14 +442,14 @@ const Cupones = () => {
               required
             />
             <label htmlFor="serviceType">Tipo de servicio:</label>
-            <input
-              type="text"
-              id="serviceType"
+            <Select
               name="serviceType"
-              placeholder="serviceType"
-              onChange={handleChange}
-              value={formData.serviceType}
-              required
+              defaultValue={{
+                label: formData.serviceType,
+                value: formData.serviceType,
+              }}
+              onChange={handleChangeSelectType}
+              options={serviceType}
             />
             <label htmlFor="quantify">Cupones a dar:</label>
             <input
@@ -433,6 +461,9 @@ const Cupones = () => {
               value={formData.quantify}
               required
             />
+            <button className="rounded-sm mt-3 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none">
+              Aceptar
+            </button>
           </form>
         </MyModal>
       ) : null}

@@ -3,12 +3,14 @@ import Table from "../table";
 import Badge from "../badge";
 import { myAxios } from "../../utils/api";
 import MyModal from "../modal";
+import FullScreen from "../modal/fullscreen";
 
 import { Switch } from "@headlessui/react";
 import Swal from "sweetalert2";
 import Image from "next/image";
 import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFilePicker } from "use-file-picker";
 
 const baseUrl = "https://api.wep.mx/";
 const baseImage = "https://api.wep.mx";
@@ -25,22 +27,35 @@ const optionDays = [
 
 const Products = () => {
   const [showModalEditar, setShowModalEditar] = useState(false);
+  const [showModalEditarVariante, setShowModalEditarVariante] = useState(false);
+  const [showModalAgregarVariante, setShowModalAgregarVariante] =
+    useState(false);
+  const [showModalSubvariants, setShowModalSubvariants] = useState(false);
   const [showModalAgregar, setShowModalAgregar] = useState(false);
   const [showModalAgregarProducto, setShowModalAgregarProducto] =
     useState(false);
   const [enabled, setEnabled] = useState(false);
+  const [haveLimitSelect, sethaveLimitSelect] = useState(false);
+  const [costGenerate, setCostGenerate] = useState(false);
+  const [isMandatory, setIsMandatory] = useState(false);
+  const [quantifySelect, setQuantifySelect] = useState(false);
   const [selectedOption, setSelectedOption] = useState([{}]);
   const [formData, setFormData] = useState({});
+  const [formDataVariant, setFormDataVariant] = useState({ name: "" });
+  const [formDataSubvariant, setFormDataSubvariant] = useState({ name: "" });
+  const [formDataVariantList, setFormDataVariantList] = useState([]);
+  const [formDataSubvariantList, setFormDataSubvariantList] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedEditMeasureProduct, setSelectedEditMeasureProduct] = useState("");
+  const [selectedEditMeasureProduct, setSelectedEditMeasureProduct] =
+    useState("");
   const [selectedEditDayProduct, setSelectedEditDayProduct] = useState("");
-  const [idProduct, setIdProduct] = useState({
-    id: "",
-    name: "",
-    description: "",
-    price: "",
-    measurementUnitId: "",
-    status: "",
+  const [idProduct, setIdProduct] = useState("");
+
+  const productVariants = formDataVariantList?.map((item) => {
+    return {
+      ...item,
+      optionVariants: formDataSubvariantList,
+    };
   });
 
   const deleteModal = () => {
@@ -86,7 +101,7 @@ const Products = () => {
     return data;
   };
 
-  const peticionGetIndividualProducts = async () => {
+  const peticionGetIndividualCategory = async () => {
     const { data } = await myAxios({
       method: "get",
       url: `/store/categories/${selectedOption.value}`,
@@ -104,12 +119,51 @@ const Products = () => {
     return data;
   };
 
+  const peticionGetIndividualProducts = async (item) => {
+    try {
+      const { data } = await myAxios({
+        method: "get",
+        url: `/store/categories/products/${item.id}`,
+        data: idProduct,
+      });
+      setIdProduct(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log("producto =>", idProduct);
+
+  const peticionUpdateIndividualProducts = async () => {
+    try {
+      const { data } = await myAxios({
+        method: "put",
+        url: `/store/categories/products/${idProduct.id}`,
+        data: idProduct,
+      });
+      setSelectedProduct(data);
+      Swal.fire(
+        `producto ${idProduct.name} actualizado con exito`,
+        "",
+        "success"
+      );
+      return data;
+    } catch (error) {
+      Swal.fire(
+        `Error al actualizar el producto ${idProduct.name}`,
+        "",
+        "warning"
+      );
+    }
+  };
+  console.log(costGenerate, "costGenerate");
   const peticionAddCategory = async () => {
     try {
       const { data } = await myAxios({
         method: "post",
         url: `/store/categories`,
-        data: formData,
+        data: { ...formData, isPromotional: enabled },
       });
       setSelectedProduct(data);
       Swal.fire({
@@ -164,7 +218,7 @@ const Products = () => {
       const { data } = await myAxios({
         method: "post",
         url: `/store/categories/products`,
-        data: formData,
+        data: { ...formData, productVariants: productVariants },
       });
       setSelectedProduct(data);
       Swal.fire({
@@ -212,6 +266,15 @@ const Products = () => {
     }
   );
 
+  const GetIndividualCategoryMutation = useMutation(
+    peticionGetIndividualCategory,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("categories");
+      },
+    }
+  );
+
   const DeleteOrderMutation = useMutation(peticionDeleteIndividualProducts, {
     onSuccess: () => {
       queryClient.invalidateQueries("categories");
@@ -236,6 +299,12 @@ const Products = () => {
     },
   });
 
+  const UpdateeProductMutation = useMutation(peticionUpdateIndividualProducts, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("categories");
+    },
+  });
+
   if (isLoading) {
     return <div className="loading-spinner"></div>;
   }
@@ -253,15 +322,25 @@ const Products = () => {
   }
 
   const handleItem = (item) => {
-    setIdProduct(item);
-    setSelectedEditMeasureProduct(dataMeasurmentUnits.filter((unit) => unit.id === item.measurementUnitId));
-    setSelectedEditDayProduct(optionDays.filter((day) => day.value === item.promotionDay))
+    GetIndividualProductMutation.mutate(item);
+    setSelectedEditMeasureProduct(
+      dataMeasurmentUnits.filter((unit) => unit.id === item.measurementUnitId)
+    );
+    setSelectedEditDayProduct(
+      optionDays.filter((day) => day.value === item.promotionDay)
+    );
   };
 
-  // console.log('ola k ase',idProduct);
-
   const latestOrders = {
-    header: ["ID", "Nombre", "Precio", "Medida", "Descripción", "Status"],
+    header: [
+      "ID",
+      "Nombre",
+      "Precio",
+      "Medida",
+      "Descripción",
+      "variante",
+      "Status",
+    ],
     body: [
       {
         id: idProduct.id,
@@ -270,6 +349,7 @@ const Products = () => {
         measurementUnitId: idProduct.measurementUnitId,
         description: idProduct.description,
         status: idProduct.status,
+        productVariants: idProduct.productVariants,
       },
     ],
   };
@@ -283,6 +363,7 @@ const Products = () => {
       <td>{item.price}</td>
       <td>{item.measurementUnitId}</td>
       <td>{item.description}</td>
+      <td>{item.productVariants.map((item) => item.name)}</td>
       <td>
         <Badge type={orderStatus[item.status]} content={item.status} />
       </td>
@@ -291,6 +372,11 @@ const Products = () => {
 
   const handleClickEditar = () => {
     setShowModalEditar(true);
+  };
+
+  const handleCloseModalAgregarProducto = () => {
+    setShowModalAgregarProducto(false);
+    setFormData("");
   };
 
   const handleClickAgregarCategoria = () => {
@@ -305,10 +391,20 @@ const Products = () => {
     deleteCategoryModal();
   };
 
+  const handleShowVariants = () => {
+    setShowModalAgregarVariante(false);
+    setShowModalSubvariants(false);
+  };
+
+  const handleShowVariantsEdit = () => {
+    setShowModalEditarVariante(false);
+    setShowModalSubvariants(false);
+  };
+
   const handleSelect = (e) => {
     setSelectedOption(e);
     setTimeout(() => {
-      GetIndividualProductMutation.mutate();
+      GetIndividualCategoryMutation.mutate();
     }, 100);
   };
 
@@ -320,21 +416,71 @@ const Products = () => {
   const handleSubmitAddProduct = () => {
     CreateProductMutation.mutate();
     setShowModalAgregarProducto(false);
+    setFormData("");
   };
 
   const handleSubmitEditProduct = () => {
-    console.log("editando");
+    UpdateeProductMutation.mutate();
     setShowModalEditar(false);
+  };
+
+  const handleSubmitAddSubvariant = () => {
+    setTimeout(() => {
+      if (formDataSubvariant.name !== "") {
+        setFormDataSubvariantList((ls) => [...ls, formDataSubvariant]);
+        setFormDataSubvariant({
+          name: "",
+          unitPrice: "",
+        });
+      } else if (formDataSubvariant.name === "") {
+        alert("Debe seleccionar una variante");
+      }
+    }, 1000);
+  };
+
+
+  console.log("subvariante", formDataSubvariant);
+  console.log("costo", costGenerate);
+  console.log("cantidad", quantifySelect);
+  console.log("array", productVariants);
+
+  const handleSubmitAddVariant = () => {
+    if (formDataVariant.name !== "") {
+      setFormDataVariantList((ls) => [...ls, formDataVariant]);
+      setShowModalAgregarVariante(false);
+    } else {
+      alert("Debe seleccionar una variante");
+    }
+  };
+
+  const handleChangeAddSubvariant = (e) => {
+    const { name, value } = e.target;
+    setFormDataSubvariant({
+      ...formDataSubvariant,
+      [name]: value,
+      costGenerate: costGenerate,
+      // inutPrice: 0,
+      quantifySelect: quantifySelect,
+    });
+  };
+
+  const handleChangeAddVariant = (e) => {
+    const { name, value } = e.target;
+    setFormDataVariant({
+      ...formDataVariant,
+      [name]: value,
+      haveLimitSelect: haveLimitSelect,
+      // maxSelect: 0,
+      isMandatory: isMandatory,
+    });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
-      ...idProduct,
+      ...formData,
       [name]: value,
-      isPromotional: enabled,
       storeCategoryId: selectedOption?.value,
-      productVariants: [],
     });
   };
 
@@ -345,7 +491,6 @@ const Products = () => {
       [name]: value,
       isPromotional: enabled,
       storeCategoryId: selectedOption?.value,
-      productVariants: [],
     });
   };
 
@@ -365,8 +510,13 @@ const Products = () => {
     setIdProduct({ ...idProduct, promotionDay: e.value });
   };
 
-  console.log("form", baseImage + idProduct.image);
+  // console.log("baseimage", baseImage + idProduct.image);
   console.log("producto product selected", idProduct);
+  // console.log("producto a crear =>", formData);
+  // console.log("variante", formDataVariant);
+  // console.log("subariante", formDataSubvariant);
+  // console.log("subarianteLISTA = >", formDataSubvariantList);
+  // console.log("VARIANTE LISTA = >", formDataVariantList);
   // console.log("product category selected", selectedProduct);
   // console.log("datafromback",product)
   // console.log("measurmentidfrombackend",dataMeasurmentUnits)
@@ -391,6 +541,16 @@ const Products = () => {
     const base64 = await convertToBase64(file);
     setFormData({ ...formData, image: base64 });
   };
+
+  const handleFileUploadEdit = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setIdProduct({ ...idProduct, image: base64 });
+  };
+
+  // const handleFileUploadTest = async (e) => {
+  //   openFileSelector();
+  // };
 
   return (
     <>
@@ -478,7 +638,7 @@ const Products = () => {
           onClose={() => setShowModalEditar(false)}
         >
           <form onSubmit={handleSubmitEditProduct} className="form">
-            <label htmlFor="name">Nombre de la producto:</label>
+            <label htmlFor="name">Nombre del producto:</label>
             <input
               type="text"
               id="name"
@@ -545,13 +705,196 @@ const Products = () => {
               label="Image"
               name="myFile"
               accept=".jpeg, .png, .jpg"
-              required
               // value={baseImage+idProduct.image}
-              onChange={handleFileUpload}
+              onChange={handleFileUploadEdit}
             />
+            <Image
+              alt={"imagen"}
+              src={baseImage + idProduct.image}
+              width={200}
+              height={200}
+            />
+            {idProduct.productVariants?.map((item) => item.name)}
+            <div
+              className="continuar"
+              onClick={() => setShowModalEditarVariante(true)}
+            >
+              Edita la variante
+            </div>
             <button className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none">
               Aceptar
             </button>
+
+            {/* editar aqui */}
+            {showModalEditarVariante ? (
+              <MyModal
+                title={`Edita la variante del producto:`}
+                isOpen={true}
+                cancelText="Cancelar"
+                onClose={handleShowVariantsEdit}
+              >
+                <form className="form">
+                  <label htmlFor="name">Nombre de la variante:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Nombre de la variante"
+                    // onChange={handleChangeAddVariant}
+                    required
+                    value={idProduct.productVariants?.map((item) => item.name)}
+                  />
+                  <span>¿Tiene un límite de selección?</span>
+                  <Switch
+                    checked={haveLimitSelect}
+                    onChange={sethaveLimitSelect}
+                    className={`${
+                      haveLimitSelect ? "bg-green-600" : "bg-slate-400"
+                    }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`${
+                        haveLimitSelect ? "translate-x-9" : "translate-x-0"
+                      }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                  <span>¿Es obligatoria?</span>
+                  <Switch
+                    checked={isMandatory}
+                    onChange={setIsMandatory}
+                    className={`${isMandatory ? "bg-green-600" : "bg-slate-400"}
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`${
+                        isMandatory ? "translate-x-9" : "translate-x-0"
+                      }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                  {idProduct.productVariants?.map((variant) =>
+                    variant.optionVariants?.map((subvariant) => {
+                      console.log("ola", subvariant.name);
+                      return (
+                        <div key={subvariant.id}>
+                          <label htmlFor="name">
+                            Nombre de la subvariante:
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Nombre de la subvariante"
+                            onChange={handleChangeAddSubvariant}
+                            value={subvariant.name}
+                          />
+                        </div>
+                      );
+                    })
+                  )}
+                  <br />
+                  <i
+                    style={{ marginBottom: "20px", marginTop: "-10px" }}
+                    onClick={() => setShowModalSubvariants(true)}
+                    className="bx bx-message-square-add"
+                  ></i>
+                  {showModalSubvariants ? (
+                    <div className="form">
+                      <label htmlFor="name">Nombre de la subvariante:</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Nombre de la subvariante"
+                        onChange={handleChangeAddSubvariant}
+                        value={formDataSubvariant.name}
+                      />
+                      <span>¿Generará un costo adicional?</span>
+                      <Switch
+                        checked={costGenerate}
+                        onChange={setCostGenerate}
+                        className={`${
+                          costGenerate ? "bg-green-600" : "bg-slate-400"
+                        }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`${
+                            costGenerate ? "translate-x-9" : "translate-x-0"
+                          }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                      </Switch>
+                      <span>
+                        ¿El cliente debe marcar la cantidad a cargar a la
+                        compra?
+                      </span>
+                      <Switch
+                        checked={quantifySelect}
+                        onChange={setQuantifySelect}
+                        className={`${
+                          quantifySelect ? "bg-green-600" : "bg-slate-400"
+                        }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`${
+                            quantifySelect ? "translate-x-9" : "translate-x-0"
+                          }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                      </Switch>
+                      <div
+                        className="continuar"
+                        onClick={handleSubmitAddSubvariant}
+                      >
+                        Agregar Subvariante
+                      </div>
+                      {formDataSubvariantList?.map((item, index) => {
+                        return (
+                          <div key={index}>
+                            <p>{item.name}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+
+                  {/* termina edicion */}
+
+                  <div className="continuar" onClick={handleSubmitAddVariant}>
+                    submit
+                  </div>
+                </form>
+              </MyModal>
+            ) : null}
+            {/* {showModalEditarVariante ? (
+              <MyModal
+                title={`Edita la variante del producto:`}
+                isOpen={true}
+                cancelText="Cancelar"
+                onClose={() => setShowModalEditarVariante(false)}
+              >
+                <form onSubmit={handleSubmitEditProduct} className="form">
+                  <label htmlFor="name">Nombre de la producto:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Nombre"
+                    onChange={handleChangeEdit}
+                    required
+                    value={idProduct.name}
+                  />
+                </form>
+              </MyModal>
+            ) : null} */}
           </form>
         </MyModal>
       )}
@@ -573,14 +916,14 @@ const Products = () => {
               required
             />
             <div className="form-flex">
-              <span>¿Esta categoría es una promoción?</span>
+              <span>¿Tiene un límite de selección?</span>
+
               <Switch
                 checked={enabled}
                 onChange={setEnabled}
                 className={`${enabled ? "bg-green-600" : "bg-slate-400"}
           relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >
-                <span className="sr-only">Use setting</span>
                 <span
                   aria-hidden="true"
                   className={`${enabled ? "translate-x-9" : "translate-x-0"}
@@ -599,13 +942,14 @@ const Products = () => {
           title={`Agrega un nuevo producto:`}
           isOpen={true}
           cancelText="Cancelar"
-          onClose={() => setShowModalAgregarProducto(false)}
+          onClose={handleCloseModalAgregarProducto}
+          fullScreen={true}
         >
           <form onSubmit={handleSubmitAddProduct} className="form">
-            <label htmlFor="category">Nombre de la producto:</label>
+            <label htmlFor="product">Nombre del producto:</label>
             <input
               type="text"
-              id="category"
+              id="product"
               name="name"
               placeholder="Nombre"
               onChange={handleChange}
@@ -662,9 +1006,186 @@ const Products = () => {
               required
               onChange={handleFileUpload}
             />
+            {/* <div onClick={handleFileUploadTest}>Select files </div>
+            <br />
+            {filesContent.map((file, index) => (
+              <div key={index}>
+                <h2>{file.name}</h2>
+                <Image
+                  alt={file.name}
+                  src={file.content}
+                  width={50}
+                  height={50}
+                ></Image>
+                <br />
+              </div>
+            ))} */}
+            <div
+              className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-gray-500 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none text-center cursor-pointer"
+              type="submit"
+              onClick={() => setShowModalAgregarVariante(true)}
+            >
+              Agregar variante
+            </div>
             <button className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none">
               Aceptar
             </button>
+            {showModalAgregarVariante ? (
+              <MyModal
+                title={`Agrega una variante al producto:`}
+                isOpen={true}
+                cancelText="Cancelar"
+                onClose={handleShowVariants}
+              >
+                <form className="form">
+                  <label htmlFor="name">Nombre de la variante:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Nombre de la variante"
+                    onChange={handleChangeAddVariant}
+                    required
+                  />
+                  <span>¿Tiene un límite de selección?</span>
+                  <Switch
+                    checked={haveLimitSelect}
+                    onChange={sethaveLimitSelect}
+                    className={`${
+                      haveLimitSelect ? "bg-green-600" : "bg-slate-400"
+                    }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`${
+                        haveLimitSelect ? "translate-x-9" : "translate-x-0"
+                      }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                  {haveLimitSelect && (
+                    <>
+                      <label htmlFor="maxSelect">Selecciona maxima:</label>
+                      <input
+                        type="number"
+                        id="maxSelect"
+                        name="maxSelect"
+                        placeholder="Selecciona maxima:"
+                        onChange={handleChangeAddVariant}
+                        required
+                      />
+                    </>
+                  )}
+                  <span>¿Es obligatoria?</span>
+                  <Switch
+                    checked={isMandatory}
+                    onChange={setIsMandatory}
+                    className={`${isMandatory ? "bg-green-600" : "bg-slate-400"}
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`${
+                        isMandatory ? "translate-x-9" : "translate-x-0"
+                      }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                  <br />
+                  <i
+                    style={{ marginBottom: "20px", marginTop: "-10px" }}
+                    onClick={() => setShowModalSubvariants(true)}
+                    className="bx bx-message-square-add"
+                  ></i>
+                  {showModalSubvariants ? (
+                    <div className="form">
+                      <label htmlFor="name">Nombre de la subvariante:</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Nombre de la subvariante"
+                        onChange={handleChangeAddSubvariant}
+                        value={formDataSubvariant.name}
+                      />
+                      <span>¿Generará un costo adicional?</span>
+                      <Switch
+                        checked={costGenerate}
+                        onChange={setCostGenerate}
+                        className={`${
+                          costGenerate ? "bg-green-600" : "bg-slate-400"
+                        }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`${
+                            costGenerate ? "translate-x-9" : "translate-x-0"
+                          }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                      </Switch>
+                      {costGenerate && (
+                          <>
+                            <label htmlFor="unitPrice">
+                            Precio unitario:
+                            </label>
+                            <input
+                              type="number"
+                              id="unitPrice"
+                              name="unitPrice"
+                              placeholder="Precio unitario:"
+                              onChange={handleChangeAddSubvariant}
+                              required
+                              value={formDataSubvariant.unitPrice}
+                            />
+                          </>
+                        )}
+                      <span>
+                        ¿El cliente debe marcar la cantidad a cargar a la
+                        compra?
+                      </span>
+                      <Switch
+                        checked={quantifySelect}
+                        onChange={setQuantifySelect}
+                        className={`${
+                          quantifySelect ? "bg-green-600" : "bg-slate-400"
+                        }
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`${
+                            quantifySelect ? "translate-x-9" : "translate-x-0"
+                          }
+            pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                      </Switch>
+                      {formDataSubvariantList?.map((item, index) => {
+                        return (
+                          <div key={index}>
+                            <p>{item.name}</p>
+                          </div>
+                        );
+                      })}
+                      <div
+                        className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-gray-500 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none text-center cursor-pointer"
+                        onClick={handleSubmitAddSubvariant}
+                      >
+                        Agregar Subvariante
+                      </div>
+                    </div>
+                  ) : null}
+                  <div
+                    className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none text-center"
+                    onClick={handleSubmitAddVariant}
+                  >
+                    Aceptar
+                  </div>
+                </form>
+              </MyModal>
+            ) : null}
           </form>
         </MyModal>
       )}
