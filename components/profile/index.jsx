@@ -61,6 +61,7 @@ const Profile = () => {
   }
 
   return (
+    <div className="card">
     <div className="profile">
       <form onSubmit={handleSubmit} className="form">
         <div className="grid">
@@ -178,6 +179,7 @@ const Profile = () => {
           Aceptar
         </button>
       </form>
+    </div>
     </div>
   );
 };
