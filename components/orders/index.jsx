@@ -1,5 +1,7 @@
 import React from "react";
+import OrdersCard from "./Order";
 import OrderEntrante from "./OrderEntrante";
+
 
 const Orders = () => {
 
@@ -7,9 +9,9 @@ const Orders = () => {
     <>
       <div className={`col-12 orders `}>
         <OrderEntrante params="ENTRANTE" />
-        <OrderEntrante params="ACEPTADO" />
-        <OrderEntrante params="PREPARANDO" />
-        <OrderEntrante params="LISTO" />
+        <OrdersCard params="ACEPTADO" />
+        <OrdersCard params="PREPARANDO" />
+        <OrdersCard params="LISTO" />
       </div>
     </>
   );

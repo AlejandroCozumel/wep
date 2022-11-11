@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { myAxios } from "../../utils/api";
-import Swal from "sweetalert2";
 
-const OrderEntrante = ({ params }) => {
-  const [costPrice, setCostPrice] = useState("");
-
+const Orders = ({ params }) => {
   const peticionGetFn = async () => {
     const { data } = await myAxios({
       method: "get",
@@ -15,23 +12,43 @@ const OrderEntrante = ({ params }) => {
   };
 
   const peticionUpdateFn = async (item) => {
+    let update = "ENTRANTE";
+    if (params === "ENTRANTE") {
+      update = "ACEPTADO";
+    } else if (params === "ACEPTADO") {
+      update = "PREPARANDO";
+    } else if (params === "PREPARANDO") {
+      update = "LISTO";
+    } else if (params === "LISTO") {
+      update = "ENTREGADO";
+    }
     const { data } = await myAxios({
       method: "put",
       url: `/orders/status/${item.id}`,
       data: {
-        orderStatus: "ACEPTADO",
-        costHomeService: costPrice,
+        orderStatus: update,
+        costHomeService: item.costHomeService,
       },
     });
     return data;
   };
 
   const peticionRollbackUpdateFn = async (item) => {
+    console.log(item);
+    let update = "ENTRANTE";
+    if (params === "ACEPTADO") {
+      update = "ENTRANTE";
+    } else if (params === "PREPARANDO") {
+      update = "ACEPTADO";
+    } else if (params === "LISTO") {
+      update = "PREPARANDO";
+    }
     const { data } = await myAxios({
       method: "put",
       url: `/orders/status/${item.id}`,
       data: {
-        orderStatus: "ENTRANTE",
+        orderStatus: update,
+        costHomeService: item.costHomeService,
       },
     });
     return data;
@@ -74,28 +91,20 @@ const OrderEntrante = ({ params }) => {
     RollbackOrderMutation.mutate(id);
   };
 
-  const handleChangeCost = (e) => {
-    setCostPrice(e.target.value);
-  };
+  let color = "#ff4a6b";
 
-  const handleChangeCreateOrder = (users) => {
-    if (!costPrice) {
-      Swal.fire(
-        `Debes de agregar el costo del servicio a domicilio para poder aceptar la orden`,
-        "",
-        "warning"
-      );
-    } else {
-      handleUpdateOrder(users);
-    }
-  };
-
-  console.log(costPrice);
+  if (params === "ENTRANTE") {
+    color = "#4caf50";
+  } else if (params === "ACEPTADO") {
+    color = "#62b4ff";
+  } else if (params === "PREPARANDO") {
+    color = "#fca11a";
+  }
 
   return (
     <>
       <div className="order-main-container">
-        <h4 style={{ background: "#4caf50" }}>{params}</h4>
+        <h4 style={{ background: color }}>{params}</h4>
         {orders?.map((users, id) => (
           <div key={id}>
             <div key={id} className="order-container">
@@ -112,15 +121,9 @@ const OrderEntrante = ({ params }) => {
                   <span>
                     <b>Costo de Envio:</b>
                   </span>
-                  <select className="product-select" onChange={handleChangeCost}>
-                    <option selected=""></option>
-                    <option
-                      value={users.establishment?.costHomeService}
-                    >{`$ ${users.establishment?.costHomeService}`}</option>
-                    <option
-                      value={users.establishment?.extendHomeService}
-                    >{`$ ${users.establishment?.extendHomeService}`}</option>
-                  </select>
+                  <span>
+                    <b>$ {users.costHomeService}</b>
+                  </span>
                 </div>
                 <div>
                   <span>
@@ -163,7 +166,7 @@ const OrderEntrante = ({ params }) => {
                   </button>
                   <button
                     className="continuar"
-                    onClick={() => handleChangeCreateOrder(users)}
+                    onClick={() => handleUpdateOrder(users)}
                   >
                     Continuar
                   </button>
@@ -177,4 +180,4 @@ const OrderEntrante = ({ params }) => {
   );
 };
 
-export default OrderEntrante;
+export default Orders;
