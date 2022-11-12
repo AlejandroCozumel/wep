@@ -3,10 +3,12 @@
   // min-width: var(--sidebar-width);
   min-width: 100px !important;
   height: 100vh;
+  position: sticky;
   // width: 100%;
   // position: fixed;
   // left: 0;
   // top: 0;
+  box-shadow: var(--box-shadow);
   background-color: var(--main-bg);
   box-shadow: var(--box-shadow);
   .sidebar__logo {
@@ -57,7 +59,7 @@
 
 @include media("<=laptop") {
   .sidebar {
-    min-width: 30px;
+    min-width: 100vh;
     padding-top: 100px;
     .sidebar__logo{
         display: none;
