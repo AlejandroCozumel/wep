@@ -11,9 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const Profile = () => {
   const [formData, setFormData] = useState("projects");
-  const [lng, setLng] = useState(-0.127758);
-  const [lat, setLat] = useState(51.507351);
+  const [lng, setLng] = useState(0);
+  const [lat, setLat] = useState(0);
   const [currentLocation, setCurrentLocation] = useState({});
+  const [finalLocation, setFinalLocation] = useState();
 
   const peticionGetProfile = async () => {
     const { data } = await myAxios({
@@ -56,8 +57,9 @@ const Profile = () => {
     return <div className="loading-spinner"></div>;
   }
 
-  console.log("form", formData);
+  // console.log("form", formData);
   console.log("geolocate", currentLocation);
+  console.log("final", finalLocation);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,17 +74,16 @@ const Profile = () => {
     alert("alert");
   };
 
-  const handleChangeUserLocationClick = (e) => {
-    e.preventDefault();
-    setLng(e.lngLat[0]);
-    setLat(e.lngLat[1]);
+  const handleChangeMarker = (e) => {
+    console.log("marker", e.lngLat.lng, e.lngLat.lat);
+    // setFinalLocation(e);
   };
 
   return (
     <div className="card">
       <div className="card">
         <ReactMapGL
-          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+          mapboxAccessToken="pk.eyJ1IjoibXJsYWNjIiwiYSI6ImNrZmZ3ZnN4cDBpdmYydG5tY3d6bTMxZHgifQ.OGctk_czFi2Hr5QE4Qfmiw"
           style={{
             width: "100%",
             height: "400px",
@@ -93,19 +94,24 @@ const Profile = () => {
             zoom: 14,
           }}
           mapStyle="mapbox://styles/mapbox/streets-v11"
+          // onMoveEnd={(e) => {console.log('move',e)}}
+          // onDragEnd={(e) => {console.log('drag',e)}}
         >
           <Marker
-            latitude={currentLocation.latitude ? currentLocation.latitude : lat}
-            longitude={currentLocation.longitude ? currentLocation.longitude : lng}
-            draggable
-            onDragEnd={(event) =>
-              console.log("marker location", event.lngLat.lng, event.lngLat.lat)
+            latitude={
+              currentLocation?.latitude ? currentLocation?.latitude : lat
             }
+            longitude={
+              currentLocation?.longitude ? currentLocation?.longitude : lng
+            }
+            draggable
+            onDragEnd={(e) => handleChangeMarker(e)}
           />
           <NavigationControl position="bottom-right" />
           <GeolocateControl
             position="top-left"
             trackUserLocation
+            showUserLocation={false}
             onGeolocate={(e) =>
               setCurrentLocation({
                 longitude: e.coords.longitude,
