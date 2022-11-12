@@ -33,3 +33,15 @@
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
 }
+
+@include media("<=tablet") {
+  .card {
+      padding: 20px;
+  }
+}
+
+@include media("<=phone") {
+  .card {
+      padding: 15px;
+  }
+}

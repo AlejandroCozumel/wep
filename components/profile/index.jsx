@@ -6,15 +6,18 @@ import ReactMapGL, {
   NavigationControl,
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Swal from "sweetalert2";
 
-import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Profile = () => {
   const [formData, setFormData] = useState("projects");
   const [lng, setLng] = useState(0);
   const [lat, setLat] = useState(0);
   const [currentLocation, setCurrentLocation] = useState({});
-  const [finalLocation, setFinalLocation] = useState();
+
+  const baseUrl = "https://api.wep.mx/";
 
   const peticionGetProfile = async () => {
     const { data } = await myAxios({
@@ -35,12 +38,50 @@ const Profile = () => {
     return data;
   };
 
+  const peticionUpdateIndividualProducts = async () => {
+    try {
+      const { data } = await myAxios({
+        method: "put",
+        url: `/establishments`,
+        data: {
+          ...formData,
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          logo: null,
+          promotionalImg: null,
+        },
+      });
+      Swal.fire(
+        `El establecimiento ${formData.establishmentName} ha sido actualizado con exito`,
+        "",
+        "success"
+      );
+      return data;
+    } catch (error) {
+      Swal.fire(
+        `Error al actualizar el establecimiento ${formData.establishmentName}`,
+        "",
+        "warning"
+      );
+    }
+  };
+
   const { data: user } = useQuery({
     queryKey: ["getProfile"],
     queryFn: peticionGetProfile,
   });
 
   const userId = user?.establishmentId;
+  const queryClient = useQueryClient();
+
+  const UpdateEstablishmentMutation = useMutation(
+    peticionUpdateIndividualProducts,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getProfile");
+      },
+    }
+  );
 
   const {
     status,
@@ -57,9 +98,7 @@ const Profile = () => {
     return <div className="loading-spinner"></div>;
   }
 
-  // console.log("form", formData);
-  console.log("geolocate", currentLocation);
-  console.log("final", finalLocation);
+  console.log("location", lng, lat);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,56 +110,77 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("alert");
+    UpdateEstablishmentMutation.mutate();
   };
 
-  const handleChangeMarker = (e) => {
-    console.log("marker", e.lngLat.lng, e.lngLat.lat);
-    // setFinalLocation(e);
-  };
+  // const convertToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsDataURL(file);
+  //     fileReader.onload = () => {
+  //       resolve(fileReader.result);
+  //     };
+  //     fileReader.onerror = (error) => {
+  //       reject(error);
+  //     };
+  //   });
+  // };
+
+  //Add image to handle submit
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+  //   setFormData({ ...formData, logo: base64 });
+  // };
+
+  // const handleFileUploadEdit = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+  //   setIdProduct({ ...idProduct, image: base64 });
+  // };
 
   return (
     <div className="card">
-      <div className="card">
-        <ReactMapGL
-          mapboxAccessToken="pk.eyJ1IjoibXJsYWNjIiwiYSI6ImNrZmZ3ZnN4cDBpdmYydG5tY3d6bTMxZHgifQ.OGctk_czFi2Hr5QE4Qfmiw"
-          style={{
-            width: "100%",
-            height: "400px",
-          }}
-          initialViewState={{
-            latitude: lat,
-            longitude: lng,
-            zoom: 14,
-          }}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          // onMoveEnd={(e) => {console.log('move',e)}}
-          // onDragEnd={(e) => {console.log('drag',e)}}
-        >
-          <Marker
-            latitude={
-              currentLocation?.latitude ? currentLocation?.latitude : lat
-            }
-            longitude={
-              currentLocation?.longitude ? currentLocation?.longitude : lng
-            }
-            draggable
-            onDragEnd={(e) => handleChangeMarker(e)}
-          />
-          <NavigationControl position="bottom-right" />
-          <GeolocateControl
-            position="top-left"
-            trackUserLocation
-            showUserLocation={false}
-            onGeolocate={(e) =>
-              setCurrentLocation({
-                longitude: e.coords.longitude,
-                latitude: e.coords.latitude,
-              })
-            }
-          />
-        </ReactMapGL>
-      </div>
+      <ReactMapGL
+        mapboxAccessToken="pk.eyJ1IjoibXJsYWNjIiwiYSI6ImNrZmZ3ZnN4cDBpdmYydG5tY3d6bTMxZHgifQ.OGctk_czFi2Hr5QE4Qfmiw"
+        style={{
+          width: "100%",
+          height: "400px",
+        }}
+        initialViewState={{
+          latitude: lat,
+          longitude: lng,
+          zoom: 14,
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
+      >
+        <Marker
+          latitude={currentLocation?.latitude ? currentLocation?.latitude : lat}
+          longitude={
+            currentLocation?.longitude ? currentLocation?.longitude : lng
+          }
+          draggable
+          onDragEnd={(e) =>
+            setCurrentLocation({
+              longitude: e.lngLat.lng,
+              latitude: e.lngLat.lat,
+            })
+          }
+        />
+        <NavigationControl position="bottom-right" />
+        <GeolocateControl
+          position="top-left"
+          trackUserLocation
+          showUserLocation={false}
+          onGeolocate={(e) =>
+            setCurrentLocation({
+              longitude: e.coords.longitude,
+              latitude: e.coords.latitude,
+            })
+          }
+        />
+      </ReactMapGL>
+      <br />
       <div className="profile">
         <form onSubmit={handleSubmit} className="form">
           <div className="grid">
@@ -223,14 +283,37 @@ const Profile = () => {
               />
             </div>
             <div className="flex-column">
-              <label htmlFor="description">Selecciona una imagen:</label>
+              <label htmlFor="description">Logo:</label>
               <input
                 type="file"
                 label="Image"
-                name="myFile"
+                name="image"
                 accept=".jpeg, .png, .jpg"
                 // required
-                onChange={handleChange}
+                // onChange={handleFileUpload}
+              />
+              <Image
+                src={`${baseUrl}${formData.logo}`}
+                alt="logo"
+                width={45}
+                height={45}
+              />
+            </div>
+            <div className="flex-column">
+              <label htmlFor="description">Imagen promocional:</label>
+              <input
+                type="file"
+                label="Image"
+                name="image"
+                accept=".jpeg, .png, .jpg"
+                // required
+                // onChange={handleFileUpload}
+              />
+              <Image
+                src={`${baseUrl}${formData.promotionalImg}`}
+                alt="logo"
+                width={45}
+                height={45}
               />
             </div>
           </div>

@@ -510,8 +510,8 @@ const Products = () => {
   };
 
   // console.log("baseimage", baseImage + idProduct.image);
-  console.log("producto product selected", idProduct);
-  // console.log("producto a crear =>", formData);
+  // console.log("producto product selected", idProduct);
+  console.log("producto a crear =>", formData.image);
   // console.log("variante", formDataVariant);
   // console.log("subariante", formDataSubvariant);
   // console.log("subarianteLISTA = >", formDataSubvariantList);
