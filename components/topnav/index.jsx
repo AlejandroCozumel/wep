@@ -103,11 +103,11 @@ const TopNav = () => {
       <div className="topnav__right">
         <div className="topnav__right-item">
           {/* dropdown here */}
-          <Dropdown
+          {/* <Dropdown
             customToggle={() => renderUserToggle(curr_user)}
             contentData={user_menu}
             renderItems={(item, index) => renderUserMenu(item, index)}
-          />
+          /> */}
         </div>
         <div className="topnav__right-item">
           <Dropdown
