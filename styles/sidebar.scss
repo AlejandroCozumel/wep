@@ -1,9 +1,10 @@
 .sidebar {
   // display: none;
   // min-width: var(--sidebar-width);
-  min-width: 100px !important;
+  // min-width: 100px !important;
   height: 100vh;
-  position: sticky;
+  padding-bottom: 5000px;
+  margin-bottom: -5000px;
   // width: 100%;
   // position: fixed;
   // left: 0;
@@ -59,8 +60,9 @@
 
 @include media("<=laptop") {
   .sidebar {
-    min-width: 100vh;
+    // min-width: 100vh;
     padding-top: 100px;
+    height: 100vh;
     .sidebar__logo{
         display: none;
     }
@@ -78,5 +80,11 @@
     span{
       font-size: 8px;
     }
+  }
+}
+
+@include media("<=phone") {
+  .sidebar{
+    width: 100px;
   }
 }
