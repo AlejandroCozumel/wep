@@ -152,6 +152,17 @@ h2 {
   transform: scale(1.1);
 }
 
+.bx-plus-medical {
+  cursor: pointer;
+  font-size: 2rem;
+  color: var(--second-color-green);
+}
+
+.bx-plus-medical:hover {
+  color: var(--main-color-green);
+  transform: scale(1.1);
+}
+
 .basic-multi-select{
   z-index: 2;
 }

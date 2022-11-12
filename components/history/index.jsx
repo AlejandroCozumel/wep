@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "../table";
 // import Badge from "../badge";
 import { myAxios } from "../../utils/api";
 
 import { useQuery } from "@tanstack/react-query";
-// import MyModal from "../modal";
+import MyModal from "../modal";
 
 const History = () => {
+  const [showModalView, setShowModalView] = useState(false);
+
   const peticionGetOrderHistrory = async () => {
     const { data } = await myAxios({
       method: "get",
@@ -22,6 +24,11 @@ const History = () => {
     error,
   } = useQuery(["getorderhistory"], peticionGetOrderHistrory);
 
+  const handleChangeView = (item) => {
+    console.log(item);
+    setShowModalView(true);
+  };
+
   const latestOrders = {
     header: [
       "ID",
@@ -32,6 +39,7 @@ const History = () => {
       "Opcion",
       "Comentarios",
       "Precio",
+      "Ver",
     ],
     body: historyOrdes?.map((history) => ({
       id: history.id,
@@ -57,20 +65,12 @@ const History = () => {
       <td>{item.option ? item.option : "❌"}</td>
       <td>{item.comments ? item.option : "❌"}</td>
       <td>$ {item.amount}</td>
-      {/* <td>
-        <Badge type="success" content={item.status} />
-      </td> */}
-      {/* <td>
+      <td>
         <i
-          style={{ marginRight: "10px" }}
-          onClick={() => handleChangeEditId(item)}
-          className="bx bx-edit"
+          onClick={() => handleChangeView(item)}
+          className="bx bx-plus-medical"
         ></i>
-        <i
-          onClick={() => handleChangeDeleteId(item)}
-          className="bx bx-trash"
-        ></i>
-      </td> */}
+      </td>
     </tr>
   );
 
@@ -82,7 +82,7 @@ const History = () => {
     return <span>Error: {error.message}</span>;
   }
 
-  console.log("history", historyOrdes);
+  // console.log("history", historyOrdes);
 
   return (
     <div>
@@ -99,6 +99,16 @@ const History = () => {
           renderBody={(item, index) => renderBody(item, index)}
         />
       </div>
+      {showModalView ? (
+        <MyModal
+          title="Detalle del cliente"
+          isOpen={true}
+          cancelText="Cancelar"
+          onClose={() => setShowModalView(false)}
+        >
+          {/* <h2>Hola</h2> */}
+        </MyModal>
+      ) : null}
     </div>
   );
 };

@@ -3,7 +3,6 @@ import Table from "../table";
 import Badge from "../badge";
 import { myAxios } from "../../utils/api";
 
-import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import MyModal from "../modal";
 import Swal from "sweetalert2";
