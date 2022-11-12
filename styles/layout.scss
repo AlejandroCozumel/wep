@@ -11,3 +11,9 @@
 .layout__content-main {
   padding: 30px;
 }
+
+@include media("<=laptop") {
+  .layout__content {
+    padding-left: 8%;
+  }
+}
