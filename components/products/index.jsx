@@ -140,11 +140,13 @@ const Products = () => {
       const { data } = await myAxios({
         method: "put",
         url: `/store/categories/products/${idProduct.id}`,
-        data: idProduct,
+        data: idProduct.image.includes("data")
+          ? idProduct
+          : { ...idProduct, image: null },
       });
       setSelectedProduct(data);
       Swal.fire(
-        `producto ${idProduct.name} actualizado con exito`,
+        `Producto ${idProduct.name} actualizado con exito`,
         "",
         "success"
       );
@@ -511,7 +513,7 @@ const Products = () => {
 
   // console.log("baseimage", baseImage + idProduct.image);
   // console.log("producto product selected", idProduct);
-  console.log("producto a crear =>", formData.image);
+  console.log("producto a crear =>", idProduct);
   // console.log("variante", formDataVariant);
   // console.log("subariante", formDataSubvariant);
   // console.log("subarianteLISTA = >", formDataSubvariantList);
@@ -587,7 +589,7 @@ const Products = () => {
 
         {selectedProduct?.products?.map((item) => (
           <div className="product-container__item" key={item.id}>
-            <div  className="card">
+            <div className="card">
               <div
                 onClick={() => handleItem(item)}
                 className="product-container__list-item"
@@ -709,19 +711,42 @@ const Products = () => {
               // value={baseImage+idProduct.image}
               onChange={handleFileUploadEdit}
             />
-            <Image
-              alt={"imagen"}
-              src={baseImage + idProduct.image}
-              width={200}
-              height={200}
-            />
-            {idProduct.productVariants?.map((item) => item.name)}
-            <div
-              className="continuar"
+            {idProduct.image.includes("data:image") ? null : (
+              <Image
+                alt={"imagen"}
+                src={baseImage + idProduct.image}
+                width={200}
+                height={200}
+              />
+            )}
+            <span>Edita o elimina las variantes</span>
+            {idProduct.productVariants?.map((item, index) => (
+              <div key={index} className="variant-edition">
+                <div className="cursor-pointer" onClick={() => setShowModalEditarVariante(true)}>
+                  {item.name}
+                </div>
+                <div className="flex">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setShowModalEditarVariante(true)}
+                  >
+                    ✏️
+                  </div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setShowModalEditarVariante(true)}
+                  >
+                    🗑️
+                  </div>
+                </div>
+              </div>
+            ))}
+            {/* <div
+              className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-gray-600 text-gray-200 hover:bg-gray-900 hover:text-gray-200 focus:outline-none cursor-pointer"
               onClick={() => setShowModalEditarVariante(true)}
             >
               Edita la variante
-            </div>
+            </div> */}
             <button className="rounded-sm mt-4 px-4 py-2 text-sm font-medium bg-green-600 text-gray-200 hover:bg-green-900 hover:text-gray-200 focus:outline-none">
               Aceptar
             </button>
