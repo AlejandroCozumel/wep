@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { myAxios } from "../../utils/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,8 @@ import notifications from "../../assets/JsonData/notification.json";
 import user_image from "../../assets/images/tuat.png";
 import user_menu from "../../assets/JsonData/user_menus.json";
 import Image from "next/image";
+import { useSelector, useDispatch } from "react-redux";
+import ThemeAction from "../../redux/actions/ThemeAction";
 
 const curr_user = {
   display_name: "Mr Tomato",
@@ -42,6 +44,25 @@ const renderUserMenu = (item, index) => (
 );
 
 const TopNav = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const themeReducer = useSelector((state) => state.ThemeReducer);
+  // console.log("holi", themeReducer);
+
+  // check code here
+  const setNavbar = (isActive) => {
+    // console.log("=>", isActive);
+    setSidebarOpen("open", sidebarOpen);
+    localStorage.setItem("navbar", isActive);
+    dispatch(ThemeAction.setNavbar(isActive));
+  };
+  // end code here
+
+  useEffect(() => {
+    const activeClass = localStorage.getItem("navbar");
+    if (activeClass === undefined) setNavbar(false);
+  }, []);
 
   const peticionGetIsOpen = async () => {
     const { data } = await myAxios({
@@ -90,7 +111,14 @@ const TopNav = () => {
 
   return (
     <div className="topnav">
-      <div>
+      <div className="flex">
+        <div className="haburger-menu-container">
+        {themeReducer?.isActive ? (
+          <i onClick={() => setNavbar(false)} className="bx bx-x"></i>
+        ) : (
+          <i onClick={() => setNavbar(true)} className="bx bx-menu"></i>
+        )}
+        </div>
         {isOpen.isOpen ? (
           <div onClick={handleIsOpen}>
             <Badge type="success" content="Abierto" />

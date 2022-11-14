@@ -1,9 +1,13 @@
 .topnav {
-  padding: 30px;
+  position: sticky;
+  top: 0;
+  padding: 20px 15px 20px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--topnav-height);
+  height: auto;
+  background-color: var(--main-bg);
+  z-index: 100;
   .topnav__right {
     display: flex;
     align-items: center;
@@ -49,7 +53,7 @@
   }
 }
 
-.notification-item:hover{
+.notification-item:hover {
   background-color: var(--second-bg);
 }
 
@@ -65,7 +69,7 @@
       width: 100% !important;
     }
   }
-  .topnav__right-user__name{
+  .topnav__right-user__name {
     font-size: 1rem;
     font-weight: 600;
   }
