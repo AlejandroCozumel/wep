@@ -49,3 +49,11 @@
     font-size: 0.8rem;
   }
 }
+
+@include media("<=phone") {
+  .dropdown__toggle {
+    i {
+      font-size: 2rem;
+    }
+  }
+}

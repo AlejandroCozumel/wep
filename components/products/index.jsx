@@ -613,12 +613,14 @@ const Products = () => {
                       height={300}
                     />
                   </div>
-                  <Table
-                    headData={latestOrders.header}
-                    renderHead={(item, index) => renderOrderHead(item, index)}
-                    bodyData={latestOrders.body}
-                    renderBody={(item, index) => renderOrderBody(item, index)}
-                  />
+                  <div className="w-[100%]">
+                    <Table
+                      headData={latestOrders.header}
+                      renderHead={(item, index) => renderOrderHead(item, index)}
+                      bodyData={latestOrders.body}
+                      renderBody={(item, index) => renderOrderBody(item, index)}
+                    />
+                  </div>
                   <div className="buttons">
                     <div onClick={() => handleClickEditar()}>
                       <Badge type="success" content="Editar ✏️" />
@@ -722,7 +724,10 @@ const Products = () => {
             <span>Edita o elimina las variantes</span>
             {idProduct.productVariants?.map((item, index) => (
               <div key={index} className="variant-edition">
-                <div className="cursor-pointer" onClick={() => setShowModalEditarVariante(true)}>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setShowModalEditarVariante(true)}
+                >
                   {item.name}
                 </div>
                 <div className="flex">

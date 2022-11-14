@@ -26,16 +26,16 @@ const OrderEntrante = ({ params }) => {
     return data;
   };
 
-  const peticionRollbackUpdateFn = async (item) => {
-    const { data } = await myAxios({
-      method: "put",
-      url: `/orders/status/${item.id}`,
-      data: {
-        orderStatus: "ENTRANTE",
-      },
-    });
-    return data;
-  };
+  // const peticionRollbackUpdateFn = async (item) => {
+  //   const { data } = await myAxios({
+  //     method: "put",
+  //     url: `/orders/status/${item.id}`,
+  //     data: {
+  //       orderStatus: "ENTRANTE",
+  //     },
+  //   });
+  //   return data;
+  // };
 
   const queryClient = useQueryClient();
 
@@ -52,11 +52,11 @@ const OrderEntrante = ({ params }) => {
     },
   });
 
-  const RollbackOrderMutation = useMutation(peticionRollbackUpdateFn, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(params);
-    },
-  });
+  // const RollbackOrderMutation = useMutation(peticionRollbackUpdateFn, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(params);
+  //   },
+  // });
 
   if (isLoading) {
     return <div className="loading-spinner"></div>;
@@ -70,9 +70,9 @@ const OrderEntrante = ({ params }) => {
     UpdateOrderMutation.mutate(id);
   };
 
-  const handleRollbackOrder = (id) => {
-    RollbackOrderMutation.mutate(id);
-  };
+  // const handleRollbackOrder = (id) => {
+  //   RollbackOrderMutation.mutate(id);
+  // };
 
   const handleChangeCost = (e) => {
     setCostPrice(e.target.value);
@@ -153,13 +153,13 @@ const OrderEntrante = ({ params }) => {
                   </div>
                 ))}
               </div>
-              <div className="order-container__buttons">
-                <button
+              <div style={{justifyContent: "flex-end"}} className="order-container__buttons">
+                {/* <button
                   className="regresar"
                   onClick={() => handleRollbackOrder(users)}
                 >
                   Regresar
-                </button>
+                </button> */}
                 <button
                   className="continuar"
                   onClick={() => handleChangeCreateOrder(users)}

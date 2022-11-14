@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Link from "next/link";
 import { myAxios } from "../../utils/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -42,6 +42,9 @@ const renderUserMenu = (item, index) => (
 );
 
 const TopNav = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  console.log("sidebarOpen", sidebarOpen);
+
   const peticionGetIsOpen = async () => {
     const { data } = await myAxios({
       method: "get",
@@ -89,7 +92,13 @@ const TopNav = () => {
 
   return (
     <div className="topnav">
-      <div>
+      <div className="menu">
+        <div
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className={`haburger-menu-container ${sidebarOpen ? "active" : ""}`}
+        >
+          <i className="bx bx-menu"></i>
+        </div>
         {isOpen.isOpen ? (
           <div onClick={handleIsOpen}>
             <Badge type="success" content="Abierto" />

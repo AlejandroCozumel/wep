@@ -68,12 +68,14 @@
       border-radius: var(--border-radius);
 
       .buttons {
+        width: 100%;
         display: flex;
         margin-top: 20px;
         cursor: pointer;
-        .badge {
-          margin: 50px;
-        }
+        justify-content: space-between;
+        // .badge {
+        //   margin: 50px;
+        // }
       }
     }
 
