@@ -64,9 +64,9 @@
   .haburger-menu-container {
     display: block;
     font-size: 2.5rem;
-    position: fixed;
-    top: 0px;
-    left: 20px;
+    position: absolute;
+    top: 6px;
+    left: 6px;
     z-index: 1;
   }
 
@@ -76,7 +76,7 @@
 
   .sidebar {
     padding-top: 70px;
-    height: 100vh;
+    min-height: 100vh;
     .sidebar__logo {
       display: none;
       // img {
