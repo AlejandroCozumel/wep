@@ -465,6 +465,16 @@ const Products = () => {
     });
   };
 
+  // const handleChangeEditSubvariant = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormDataSubvariant({
+  //     ...formDataSubvariant,
+  //     [name]: value,
+  //   });
+  // };
+
+
+
   const handleChangeAddVariant = (e) => {
     const { name, value } = e.target;
     setFormDataVariant({
@@ -809,7 +819,8 @@ const Products = () => {
                   </Switch>
                   {idProduct.productVariants?.map((variant) =>
                     variant.optionVariants?.map((subvariant) => {
-                      console.log("ola", subvariant.name);
+                      console.log("item subvariant", subvariant);
+                      console.log("array subvariant from state", formDataSubvariant);
                       return (
                         <div key={subvariant.id}>
                           <label htmlFor="name">
@@ -820,7 +831,7 @@ const Products = () => {
                             id="name"
                             name="name"
                             placeholder="Nombre de la subvariante"
-                            onChange={handleChangeAddSubvariant}
+                            // onChange={handleChangeEditSubvariant}
                             value={subvariant.name}
                           />
                         </div>

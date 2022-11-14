@@ -42,8 +42,6 @@ const renderUserMenu = (item, index) => (
 );
 
 const TopNav = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  console.log("sidebarOpen", sidebarOpen);
 
   const peticionGetIsOpen = async () => {
     const { data } = await myAxios({
@@ -92,13 +90,7 @@ const TopNav = () => {
 
   return (
     <div className="topnav">
-      <div className="menu">
-        <div
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`haburger-menu-container ${sidebarOpen ? "active" : ""}`}
-        >
-          <i className="bx bx-menu"></i>
-        </div>
+      <div>
         {isOpen.isOpen ? (
           <div onClick={handleIsOpen}>
             <Badge type="success" content="Abierto" />

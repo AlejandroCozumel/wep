@@ -12,12 +12,20 @@
   // margin-bottom: -5000px;
 }
 
+
+
 .layout__content-main {
   padding: 30px;
 }
 
-// @include media("<=laptop") {
-//   .layout__content {
-//     padding-left: 8%;
-//   }
-// }
+@include media("<=laptop") {
+.sidebar-width-none{
+  padding-left: 0;
+}
+}
+
+@include media("<=phone") {
+  .layout__content-main {
+    padding: 0 15px 0 20px;
+  }
+}

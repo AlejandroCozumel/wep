@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import ThemeAction from '../../redux/actions/ThemeAction';
+import ThemeAction from "../../redux/actions/ThemeAction";
 
 const mode_settings = [
   {
@@ -84,6 +84,7 @@ const ThemeMenu = () => {
   const dispatch = useDispatch();
 
   const setMode = (mode) => {
+    // console.log("=>", mode);
     setCurrMode(mode.id);
     localStorage.setItem("themeMode", mode.class);
     dispatch(ThemeAction.setMode(mode.class));

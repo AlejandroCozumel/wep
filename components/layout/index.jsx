@@ -8,6 +8,7 @@ import ThemeAction from "../../redux/actions/ThemeAction";
 
 const Layout = ({ children, ...props }) => {
   const themeReducer = useSelector((state) => state.ThemeReducer);
+  console.log("themeReducer", themeReducer);
 
   const dispatch = useDispatch();
 
@@ -23,7 +24,7 @@ const Layout = ({ children, ...props }) => {
     <>
       <div className={`layout ${themeReducer.mode} ${themeReducer.color} `}>
         <Sidebar {...props} />
-        <div className="layout__content">
+        <div className={`layout__content ${themeReducer?.isActive ? "" : "sidebar-width-none"}`}>
           <TopNav />
           <div className="layout__content-main">{children}</div>
         </div>

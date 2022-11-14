@@ -40,6 +40,7 @@ const History = () => {
       "Comentarios",
       "Precio",
       "Ver",
+      "fecha",
     ],
     body: historyOrdes?.map((history) => ({
       id: history.id,
@@ -52,7 +53,7 @@ const History = () => {
       amount: history.amount,
     })),
   };
-
+console.log(historyOrdes)
   const renderHead = (item, index) => <th key={index}>{item}</th>;
 
   const renderBody = (item, index) => (
