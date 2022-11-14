@@ -57,10 +57,7 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    const activeClass = sidebar_settings.find(
-      (e) => e.class === localStorage.getItem("navbar")
-    );
-
+    const activeClass = localStorage.getItem("navbar");
     if (activeClass === undefined) setNavbar(false);
   }, []);
 
