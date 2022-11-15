@@ -113,11 +113,15 @@ const TopNav = () => {
     <div className="topnav">
       <div className="flex">
         <div className="haburger-menu-container">
-        {themeReducer?.isActive ? (
-          <i onClick={() => setNavbar(false)} className="bx bx-x"></i>
-        ) : (
-          <i onClick={() => setNavbar(true)} className="bx bx-menu"></i>
-        )}
+          <div className="menu">
+          {themeReducer?.isActive ? (
+            // <i onClick={() => setNavbar(false)} className="bx bx-x"></i>
+            <span className={ `fold span `} onClick={() => setNavbar(false)} ></span>
+          ) : (
+            // <i onClick={() => setNavbar(true)} className="bx bx-menu"></i>
+            <span className="span" onClick={() => setNavbar(true)}></span>
+          )}
+          </div>
         </div>
         {isOpen.isOpen ? (
           <div onClick={handleIsOpen}>

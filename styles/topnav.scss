@@ -17,6 +17,57 @@
   }
 }
 
+.menu {
+  width: 65px;
+  // height: 45px;
+}
+
+.span {
+  display: block;
+  position: absolute;
+  top: 35px;
+  left: 18px;
+  right: 18px;
+  width: 45px;
+  height: 8px;
+  background: gray;
+  transition: transform 0.3s cubic-bezier(0.1, 0.3, 0.5, 1);
+}
+
+.span::before,
+.span::after {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: gray;
+  content: "";
+  transition: transform 0.3s cubic-bezier(0.1, 0.3, 0.5, 1);
+  transition: opacity 0.1s linear;
+}
+
+.span::before {
+  transform: translateY(-15px);
+}
+
+.span::after {
+  transform: translateY(15px);
+}
+
+.fold::before {
+  transform: translateY(0px);
+  transform: rotate(-90deg);
+}
+
+.fold::after {
+  opacity: 0;
+}
+
+.fold {
+  transform: rotate(45deg);
+}
+
 .search {
   position: relative;
   height: 50px;

@@ -8,6 +8,7 @@
   box-shadow: var(--box-shadow);
   background-color: var(--main-bg);
   box-shadow: var(--box-shadow);
+  transition: left 1.3s ease;
   .sidebar__logo {
     cursor: pointer;
     height: 150px;
@@ -60,12 +61,11 @@
 @include media("<=laptop") {
   .inactive {
     display: none;
+    transition: left 1.3s ease;
   }
   .haburger-menu-container {
     display: flex;
-    align-items: center;
-    font-size: 2.5rem;
-    padding-right: 10px;
+    // align-items: center;
   }
 
   .bx-menu::before {
