@@ -205,6 +205,7 @@ const Roles = () => {
           style={{ marginRight: "10px" }}
           onClick={() => handleChangeEditId(item)}
           className="bx bx-edit"
+
         ></i>
         <i
           onClick={() => handleChangeDeleteId(item)}

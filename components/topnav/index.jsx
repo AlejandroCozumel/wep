@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Dropdown from "../dropdown";
 import ThemeMenu from "../thememenu";
 import Badge from "../badge";
+import logo from "../../assets/images/logo.png";
 
 import notifications from "../../assets/JsonData/notification.json";
 import user_image from "../../assets/images/tuat.png";
@@ -90,11 +91,11 @@ const TopNav = () => {
     error,
   } = useQuery(["isopen"], peticionGetIsOpen);
 
-  const UpdateIsOpenProductMutation = useMutation(peticionUpdateIsOpen, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("isopen");
-    },
-  });
+  // const UpdateIsOpenProductMutation = useMutation(peticionUpdateIsOpen, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("isopen");
+  //   },
+  // });
 
   const handleIsOpen = () => {
     alert("hola");
@@ -114,24 +115,32 @@ const TopNav = () => {
       <div className="flex">
         <div className="haburger-menu-container">
           <div className="menu">
-          {themeReducer?.isActive ? (
-            // <i onClick={() => setNavbar(false)} className="bx bx-x"></i>
-            <span className={ `fold span `} onClick={() => setNavbar(false)} ></span>
-          ) : (
-            // <i onClick={() => setNavbar(true)} className="bx bx-menu"></i>
-            <span className="span" onClick={() => setNavbar(true)}></span>
-          )}
+            {themeReducer?.isActive ? (
+              // <i onClick={() => setNavbar(false)} className="bx bx-x"></i>
+              <span
+                className={`fold span `}
+                onClick={() => setNavbar(false)}
+              ></span>
+            ) : (
+              // <i onClick={() => setNavbar(true)} className="bx bx-menu"></i>
+              <span className="span" onClick={() => setNavbar(true)}></span>
+            )}
           </div>
         </div>
-        {isOpen.isOpen ? (
-          <div onClick={handleIsOpen}>
-            <Badge type="success" content="Abierto" />
+        <div className="flex items-center">
+          {isOpen.isOpen ? (
+            <div onClick={handleIsOpen}>
+              <Badge type="success" content="Abierto" />
+            </div>
+          ) : (
+            <div onClick={handleIsOpen}>
+              <Badge type="danger" content="Cerrado" />
+            </div>
+          )}
+          <div className="navbar-logo">
+            <Image src={logo} alt="wep logo" width={130} height={40} />
           </div>
-        ) : (
-          <div onClick={handleIsOpen}>
-            <Badge type="danger" content="Cerrado" />
-          </div>
-        )}
+        </div>
       </div>
       <div className="topnav__right">
         <div className="topnav__right-item">

@@ -1,7 +1,7 @@
 .topnav {
   position: sticky;
   top: 0;
-  padding: 20px 15px 20px 10px;
+  padding: 15px 15px 15px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,13 +13,17 @@
     display: flex;
     align-items: center;
     .topnav__right-item ~ .topnav__right-item {
-      margin-left: 30px;
+      margin-left: 20px;
     }
   }
 }
 
+.navbar-logo {
+  display: none;
+}
+
 .menu {
-  width: 65px;
+  width: 60px;
   // height: 45px;
 }
 
@@ -29,8 +33,8 @@
   top: 35px;
   left: 18px;
   right: 18px;
-  width: 45px;
-  height: 8px;
+  width: 40px;
+  height: 5px;
   background: gray;
   transition: transform 0.3s cubic-bezier(0.1, 0.3, 0.5, 1);
 }
@@ -39,9 +43,9 @@
 .span::after {
   position: absolute;
   display: block;
-  left: 0;
+  left: 30;
   width: 100%;
-  height: 8px;
+  height: 5px;
   background-color: gray;
   content: "";
   transition: transform 0.3s cubic-bezier(0.1, 0.3, 0.5, 1);
@@ -124,5 +128,19 @@
   .topnav__right-user__name {
     font-size: 1rem;
     font-weight: 600;
+  }
+}
+
+@include media("<=laptop") {
+  .navbar-logo {
+    display: block;
+    cursor: pointer;
+  }
+  .topnav {
+    .topnav__right {
+      .topnav__right-item ~ .topnav__right-item {
+        margin-left: 10px;
+      }
+    }
   }
 }

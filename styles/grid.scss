@@ -159,3 +159,18 @@
       width: 100%;
   }
 }
+
+@include media("<=tablet") {
+  .col-4{
+    width: 100%;
+  }
+  .col-8{
+    width: 100%;
+  }
+}
+
+@include media("<=phone") {
+  .col-6{
+    width: 100%;
+  }
+}

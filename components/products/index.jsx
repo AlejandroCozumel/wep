@@ -473,8 +473,6 @@ const Products = () => {
   //   });
   // };
 
-
-
   const handleChangeAddVariant = (e) => {
     const { name, value } = e.target;
     setFormDataVariant({
@@ -633,10 +631,10 @@ const Products = () => {
                   </div>
                   <div className="buttons">
                     <div onClick={() => handleClickEditar()}>
-                      <Badge type="success" content="Editar ✏️" />
+                      <i className="bx bx-edit" />
                     </div>
                     <div onClick={() => deleteModal()}>
-                      <Badge type="danger" content="Eliminar 🗑️" />
+                      <i className="bx bx-trash" />
                     </div>
                   </div>
                 </div>
@@ -820,7 +818,10 @@ const Products = () => {
                   {idProduct.productVariants?.map((variant) =>
                     variant.optionVariants?.map((subvariant) => {
                       console.log("item subvariant", subvariant);
-                      console.log("array subvariant from state", formDataSubvariant);
+                      console.log(
+                        "array subvariant from state",
+                        formDataSubvariant
+                      );
                       return (
                         <div key={subvariant.id}>
                           <label htmlFor="name">

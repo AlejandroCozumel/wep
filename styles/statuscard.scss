@@ -55,3 +55,9 @@
 .status-card:hover {
   color: var(--txt-white);
 }
+
+@include media ("<=tablet") {
+  .status-card {
+    flex-direction: column;
+  }
+}

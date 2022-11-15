@@ -165,7 +165,7 @@ export default function DashboardHome() {
           <div className="col-6">
             <div className="row">
               {statusCards.map((item, index) => (
-                <div className="col-6" key={index}>
+                <div className="col-md-6" key={index}>
                   {/* status card here */}
                   <StatusCard
                     icon={item.icon}
