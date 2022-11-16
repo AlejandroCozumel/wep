@@ -22,7 +22,6 @@
       overflow: hidden;
       z-index: 0;
       transition: transform 0.3s ease 0s;
-      margin-bottom: 30px;
       cursor: pointer;
       span,
       i {
@@ -55,7 +54,7 @@
       transform: scale(1.01);
     }
     .product-container__list-item-detail {
-      margin-bottom: 20px;
+      margin: 15px 0;
       width: 100%;
       border: 1px solid lightgray;
       padding: 30px;

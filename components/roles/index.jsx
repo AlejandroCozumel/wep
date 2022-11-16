@@ -174,7 +174,7 @@ const Roles = () => {
   const handleShowModalAgregar = () => {
     setShowModalAgregar(false);
     setFormData("");
-  }
+  };
 
   const latestOrders = {
     header: ["ID", "Rol", "Descripción", "Tipo", "Status", "Acción"],
@@ -205,7 +205,6 @@ const Roles = () => {
           style={{ marginRight: "10px" }}
           onClick={() => handleChangeEditId(item)}
           className="bx bx-edit"
-
         ></i>
         <i
           onClick={() => handleChangeDeleteId(item)}
@@ -222,15 +221,19 @@ const Roles = () => {
         onClick={() => setShowModalAgregar(true)}
         className="bx bx-message-square-add"
       ></i>
+      <div className="search">
+        <input type="text" placeholder="Search here..." />
+        <i className="bx bx-search"></i>
+      </div>
       {isFetching && (
         <div className="card">
-        <Table
-          limit={5}
-          headData={latestOrders.header}
-          renderHead={(item, index) => renderOrderHead(item, index)}
-          bodyData={latestOrders.body}
-          renderBody={(item, index) => renderOrderBody(item, index)}
-        />
+          <Table
+            limit={5}
+            headData={latestOrders.header}
+            renderHead={(item, index) => renderOrderHead(item, index)}
+            bodyData={latestOrders.body}
+            renderBody={(item, index) => renderOrderBody(item, index)}
+          />
         </div>
       )}
       {showModalAgregar ? (
