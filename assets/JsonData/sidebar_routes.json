@@ -15,6 +15,11 @@
         "icon": "bx bx-package"
     },
     {
+        "display_name": "Usuarios",
+        "route": "/users",
+        "icon": "bx bx-user-circle"
+    },
+    {
         "display_name": "Roles",
         "route": "/rol",
         "icon": "bx bx-user-plus"

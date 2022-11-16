@@ -564,17 +564,6 @@ const Products = () => {
   return (
     <>
       <div className="card">
-        <Select
-          defaultValue={selectedOption}
-          onChange={handleSelect}
-          options={product?.storeCategories?.map((select) => ({
-            label: select.name,
-            value: select.id,
-          }))}
-        />
-      </div>
-      <div>
-        <br />
         <i
           style={{ marginBottom: "20px", marginTop: "-10px" }}
           onClick={handleClickAgregarCategoria}
@@ -587,6 +576,16 @@ const Products = () => {
             className="bx bx-trash"
           ></i>
         )}
+        <Select
+          defaultValue={selectedOption}
+          onChange={handleSelect}
+          options={product?.storeCategories?.map((select) => ({
+            label: select.name,
+            value: select.id,
+          }))}
+        />
+      </div>
+      <div>
         {selectedProduct && <h2>Productos:</h2>}
         {selectedProduct && (
           <i
