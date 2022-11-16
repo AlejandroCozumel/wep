@@ -1,5 +1,5 @@
-import Layout from "../components/layout";
-import Orders from "../components/orders";
+import Layout from "../../components/layout";
+import Orders from "../../components/orders";
 
 export default function Order() {
   return (

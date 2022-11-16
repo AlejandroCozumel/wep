@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../components/layout";
-import Roles from "../components/roles";
+import Layout from "../../components/layout";
+import Roles from "../../components/roles";
 
 const Rol = () => {
   return (

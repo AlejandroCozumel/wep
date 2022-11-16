@@ -12,11 +12,9 @@ import user_menu from "../../assets/JsonData/user_menus.json";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import ThemeAction from "../../redux/actions/ThemeAction";
+import { useLogout } from "../hooks/auth/useLogout";
+import {useCurrentUser} from "../hooks/auth/useCurrentUser"
 
-const curr_user = {
-  display_name: "Mr Tomato",
-  image: user_image,
-};
 
 const renderNotificationItem = (item, index) => (
   <div className="notification-item" key={index}>
@@ -45,11 +43,16 @@ const renderUserMenu = (item, index) => (
 
 const TopNav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const { logout } = useLogout();
   const dispatch = useDispatch();
   const themeReducer = useSelector((state) => state.ThemeReducer);
   // console.log("holi", themeReducer);
-
+  const currentUser = useCurrentUser();
+  const curr_user = {
+    display_name: currentUser.data?.user.name,
+    image: user_image,
+  };
+  console.log(currentUser)
   // check code here
   const setNavbar = (isActive) => {
     // console.log("=>", isActive);
@@ -101,6 +104,10 @@ const TopNav = () => {
     // UpdateIsOpenProductMutation.mutate();
   };
 
+  const handleLogout = () => {
+     logout();
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -124,20 +131,20 @@ const TopNav = () => {
             <Badge type="success" content="Abierto" />
           </div>
         ) : (
-          <div onClick={handleIsOpen}>
+          <div onClick={handleLogout}>
             <Badge type="danger" content="Cerrado" />
           </div>
         )}
       </div>
       <div className="topnav__right">
         <div className="topnav__right-item">
-          {/* dropdown here */}
-          {/* <Dropdown
+      
+           <Dropdown
             customToggle={() => renderUserToggle(curr_user)}
             contentData={user_menu}
             renderItems={(item, index) => renderUserMenu(item, index)}
-          /> */}
-        </div>
+      
+/>        </div>
         <div className="topnav__right-item">
           <Dropdown
             icon="bx bx-bell"

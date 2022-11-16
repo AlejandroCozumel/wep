@@ -8,7 +8,6 @@ import ThemeAction from "../../redux/actions/ThemeAction";
 
 const Layout = ({ children, ...props }) => {
   const themeReducer = useSelector((state) => state.ThemeReducer);
-  console.log("themeReducer", themeReducer);
 
   const dispatch = useDispatch();
 

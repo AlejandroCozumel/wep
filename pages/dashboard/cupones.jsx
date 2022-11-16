@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../components/layout";
-import Coupons from "../components/coupons";
+import Layout from "../../components/layout";
+import Coupons from "../../components/coupons";
 
 const Cupones = () => {
   return (

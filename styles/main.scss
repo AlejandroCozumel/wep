@@ -23,6 +23,7 @@
   padding: 0;
   margin: 0;
   -webkit-tap-highlight-color: transparent;
+
 }
 
 html,
@@ -67,8 +68,8 @@ h2 {
 }
 
 .subtitle {
-  padding-bottom: 20px ;
- }
+  padding-bottom: 20px;
+}
 
 .light-background {
   background-color: var(--main-bg-light);
@@ -109,16 +110,20 @@ h2 {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 .loading-spinner {
   margin: 30px 0;
   width: 50px;
   height: 50px;
-  border: 10px solid #f3f3f3; /* Light grey */
-  border-top: 10px solid #383636; /* Black */
+  border: 10px solid #f3f3f3;
+  /* Light grey */
+  border-top: 10px solid #383636;
+  /* Black */
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
 }
@@ -128,6 +133,7 @@ h2 {
   font-size: 2rem;
   color: var(--second-color-orange);
 }
+
 .bx-message-square-add:hover {
   color: var(--main-color-orange);
   transform: scale(1.1);
@@ -138,15 +144,18 @@ h2 {
   font-size: 2rem;
   color: var(--second-color-red);
 }
+
 .bx-trash:hover {
   color: var(--main-color-red);
   transform: scale(1.1);
 }
-.bx-edit{
+
+.bx-edit {
   cursor: pointer;
   font-size: 2rem;
   color: var(--second-color-green);
 }
+
 .bx-edit:hover {
   color: var(--main-color-green);
   transform: scale(1.1);
@@ -163,7 +172,7 @@ h2 {
   transform: scale(1.1);
 }
 
-.basic-multi-select{
+.basic-multi-select {
   z-index: 2;
 }
 

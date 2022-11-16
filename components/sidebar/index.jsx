@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import logo from "../../assets/images/logo.png";
 import sidebar_items from "../../assets/JsonData/sidebar_routes.json";
 import { useSelector } from "react-redux";
+import { useCurrentUser } from "../hooks/auth/useCurrentUser";
 
 const SidebarItems = (props) => {
   const active = props.active ? "active" : "";
@@ -26,14 +27,36 @@ const SidebarItems = (props) => {
 
 const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sideBarItems, setsideBarItems] = useState(sidebar_items);
 
   const themeReducer = useSelector((state) => state.ThemeReducer);
 
   const router = useRouter();
 
-  const activeItem = sidebar_items.findIndex(
+  const currentUser = useCurrentUser();
+  const currentUserRoutes = currentUser.data?.user.role.menuItems.map((route) => {return {
+    name: route.name
+  }})
+
+ 
+  console.log(currentUserRoutes)
+
+  useEffect(() => {
+    if (currentUserRoutes) {
+      const newRoutes =  sideBarItems.filter((item) => currentUserRoutes.find((currentItem) => item.apiName === currentItem.name));
+      console.log(newRoutes)
+      setsideBarItems(newRoutes);
+    }
+ 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
+  
+ 
+  const activeItem = sideBarItems.findIndex(
     (item) => item.route === router.pathname
   );
+
+
 
   return (
     <>
@@ -49,11 +72,11 @@ const Sidebar = () => {
       </div>
       <div className={`sidebar ${themeReducer?.isActive ? "" : "inactive"}`}>
         <div className="sidebar__logo">
-          <Link href="/profile">
+          <Link href="/dashboard/profile">
             <Image src={logo} alt="company logo" />
           </Link>
         </div>
-        {sidebar_items.map((item, index) => (
+        {sideBarItems.map((item, index) => (
           <SidebarItems
             key={index}
             title={item.display_name}

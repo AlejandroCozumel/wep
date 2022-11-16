@@ -1,52 +1,62 @@
 [
     {
         "display_name": "Dashboard",
-        "route": "/",
-        "icon": "bx bx-category-alt"
+        "route": "/dashboard",
+        "icon": "bx bx-category-alt",
+        "apiName": "user"
     },
     {
         "display_name": "Ordenes",
-        "route": "/orders",
-        "icon": "bx bx-cart"
+        "route": "/dashboard/orders",
+        "icon": "bx bx-cart",
+        "apiName": "orders"
     },
     {
         "display_name": "Productos",
-        "route": "/productos",
-        "icon": "bx bx-package"
+        "route": "/dashboard/productos",
+        "icon": "bx bx-package",
+        "apiName": "store"
     },
     {
         "display_name": "Roles",
-        "route": "/rol",
-        "icon": "bx bx-user-plus"
+        "route": "/dashboard/rol",
+        "icon": "bx bx-user-plus",
+        "apiName": "roles"
     },
     {
         "display_name": "Cupones",
-        "route": "/cupones",
-        "icon": "bx bx-gift"
+        "route": "/dashboard/cupones",
+        "icon": "bx bx-gift",
+        "apiName": "coupons"
     },
     {
         "display_name": "Medida",
-        "route": "/measurments",
-        "icon": "bx bx-calculator"
+        "route": "/dashboard/measurments",
+        "icon": "bx bx-calculator",
+        "apiName": "measurementUnits"
     },
     {
         "display_name": "Whatsapp",
-        "route": "/qr",
-        "icon": "bx bxl-whatsapp"
+        "route": "/dashboard/qr",
+        "icon": "bx bxl-whatsapp",
+        "apiName": "user"
     },
     {
         "display_name": "Historial",
-        "route": "/history",
-        "icon": "bx bx-history"
+        "route": "/dashboard/history",
+        "icon": "bx bx-history",
+        "apiName": "billing"
     },
     {
         "display_name": "Clientes",
-        "route": "/customers",
-        "icon": "bx bx-store-alt"
+        "route": "/dashboard/customers",
+        "icon": "bx bx-store-alt",
+        "apiName": "user"
     },
     {
         "display_name": "Profile",
-        "route": "/profile",
-        "icon": "bx bx-cog"
+        "route": "/dashboard/profile",
+        "icon": "bx bx-cog",
+        "apiName": "user"
     }
 ]

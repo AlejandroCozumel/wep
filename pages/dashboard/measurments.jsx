@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../components/layout";
-import Measurement from "../components/measurementUnit";
+import Layout from "../../components/layout";
+import Measurement from "../../components/measurementUnit";
 
 const Measurments = () => {
   return (

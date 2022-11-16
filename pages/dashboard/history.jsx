@@ -1,7 +1,7 @@
 import React from "react";
-import HistoryTable from "../components/history";
+import HistoryTable from "../../components/history";
 
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 
 const History = () => {
   return (
