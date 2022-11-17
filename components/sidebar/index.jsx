@@ -39,12 +39,10 @@ const Sidebar = () => {
   }})
 
  
-  console.log(currentUserRoutes)
-
   useEffect(() => {
     if (currentUserRoutes) {
       const newRoutes =  sideBarItems.filter((item) => currentUserRoutes.find((currentItem) => item.apiName === currentItem.name));
-      console.log(newRoutes)
+
       setsideBarItems(newRoutes);
     }
  
